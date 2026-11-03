@@ -95,7 +95,11 @@ public final class CultivationFoundation {
     }
     public record State(String roots, int grade, String active, String known, double mana, double maximum, boolean blocked) {}
     public record Select(String id) {}
+    public record Refresh() {}
     public static void registerNetwork() {
+        Cultivation.CHANNEL.messageBuilder(Refresh.class,6,NetworkDirection.PLAY_TO_SERVER)
+            .encoder((m,b)->{}).decoder(b->new Refresh())
+            .consumerMainThread((m,c)->{var p=c.get().getSender();if(p!=null){ensure(p);Cultivation.sync(p);}c.get().setPacketHandled(true);}).add();
         Cultivation.CHANNEL.messageBuilder(State.class, 1, NetworkDirection.PLAY_TO_CLIENT)
             .encoder((m,b)->{b.writeUtf(m.roots);b.writeVarInt(m.grade);b.writeUtf(m.active);b.writeUtf(m.known);b.writeDouble(m.mana);b.writeDouble(m.maximum);b.writeBoolean(m.blocked);})
             .decoder(b->new State(b.readUtf(),b.readVarInt(),b.readUtf(),b.readUtf(),b.readDouble(),b.readDouble(),b.readBoolean()))

@@ -53,50 +53,57 @@ public class ClientSetup {
         @SubscribeEvent public static void logout(net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggingOut event) { ClientState.clear(); }
     }
     static class StatusScreen extends Screen {
+        private float panelScale;
+        private int panelLeft, panelTop;
         StatusScreen() { super(Component.translatable("screen.xiuxian.status")); }
         @Override protected void init() {
-            addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.translatable("screen.xiuxian.manuals"), b -> minecraft.setScreen(new ManualScreen())).bounds(width/2-132,height/2+100,264,20).build());
+            panelScale=Math.min(1f,Math.min((width-12f)/300,(height-12f)/255));
+            panelLeft=(int)((width-300*panelScale)/2);
+            panelTop=(int)((height-255*panelScale)/2);
+            addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.translatable("screen.xiuxian.manuals"), b -> minecraft.setScreen(new ManualScreen())).bounds(panelLeft+(int)(18*panelScale),panelTop+(int)(228*panelScale),(int)(264*panelScale),(int)(20*panelScale)).build());
+            Cultivation.CHANNEL.sendToServer(new CultivationFoundation.Refresh());
         }
         @Override public boolean isPauseScreen() { return false; }
         @Override public void render(GuiGraphics g, int mouseX, int mouseY, float partial) {
             renderBackground(g);
-            int x = width / 2 - 150, y = height / 2 - 128;
-            g.fill(x-1, y-1, x+301, y+256, 0xff709c82);
-            g.fill(x, y, x+300, y+255, 0xff17251f);
-            g.drawCenteredString(font, title, width/2, y+15, 0xffd7f0bd);
-            g.drawString(font, Component.translatable("screen.xiuxian.player", minecraft.player.getName()), x+18, y+40, 0xffffff);
-            Component realm = Component.translatable(ClientState.level > 0 ? "realm.xiuxian.qi_" + ClientState.level : "screen.xiuxian.mortal");
-            g.drawString(font, realm, x+18, y+61, 0xffd7f0bd);
-            boolean full = ClientState.level == 9 && ClientState.required > 0 && ClientState.points >= ClientState.required;
-            Component progress = Component.translatable(ClientState.level == 0 ? "screen.xiuxian.progress_locked" : full ? "screen.xiuxian.progress_full" : "screen.xiuxian.progress", ClientState.points, ClientState.required);
-            g.drawString(font, progress, x+18, y+82, 0xffc3cec5);
-            double ratio = full ? 1 : ClientState.required > 0 ? (double) ClientState.points / ClientState.required : 0;
-            ratio = Math.max(0, Math.min(1, ratio));
-            g.fill(x+18, y+98, x+282, y+112, 0xff435449);
-            g.fill(x+19, y+99, x+281, y+111, 0xff0d1712);
-            g.fill(x+19, y+99, x+19+(int)(262*ratio), y+111, 0xff79b777);
-            g.drawCenteredString(font, String.format(java.util.Locale.ROOT, "%.1f%%", ratio * 100), width/2, y+101, 0xffffffff);
-            String health = String.format(java.util.Locale.ROOT, "%.1f / %.1f", minecraft.player.getHealth(), minecraft.player.getMaxHealth());
-            String damage = String.format(java.util.Locale.ROOT, "%.1f", ClientState.attackDamage);
-            g.drawString(font, Component.translatable("screen.xiuxian.health", health), x+18, y+120, 0xffead0c5);
-            g.drawString(font, Component.translatable("screen.xiuxian.attack", damage), x+18, y+139, 0xffead0c5);
-            g.drawString(font, Component.translatable("screen.xiuxian.technique", Component.translatable("manual.xiuxian.tier_" + ClientState.technique)), x+18, y+158, 0xffc3cec5);
-            if (ClientState.level > 0 && !full) {
-                String rate = String.format(java.util.Locale.ROOT, "%.2f", ClientState.rate);
-                g.drawString(font, Component.translatable(ClientState.rate > 0 ? "screen.xiuxian.breathing" : "screen.xiuxian.breathing_paused", rate), x+18, y+177, 0xff99ab9d);
-            }
-            var food = minecraft.player.getEffect(CultivationResources.NOURISHMENT.get());
-            if (food != null) g.drawString(font, Component.translatable("screen.xiuxian.food_time", food.getDuration() / 20), x+18, y+193, 0xffc4d998);
-            var state = ClientState.foundation;
-            if (state != null) {
-                g.drawString(font, Component.translatable("screen.xiuxian.mana", (int)state.mana(), (int)state.maximum()), x+18, y+209, 0xffb0d8e9);
-                if (state.blocked() && !full) g.drawString(font, Component.translatable("screen.xiuxian.manual_gate"), x+18, y+223, 0xffe2c38d);
-            }
-            super.render(g, mouseX, mouseY, partial);
+            g.pose().pushPose();
+            g.pose().translate(panelLeft,panelTop,0);
+            g.pose().scale(panelScale,panelScale,1);
+            g.fill(-1,-1,301,256,0xff709c82);
+            g.fill(0,0,300,255,0xff17251f);
+            g.drawCenteredString(font,title,150,14,0xffd7f0bd);
+            g.drawString(font,Component.translatable("screen.xiuxian.player",minecraft.player.getName()),18,35,0xffffff);
+            g.drawString(font,Component.translatable(ClientState.level>0?"realm.xiuxian.qi_"+ClientState.level:"screen.xiuxian.mortal"),18,53,0xffd7f0bd);
+            boolean full=ClientState.level==9&&ClientState.required>0&&ClientState.points>=ClientState.required;
+            Component progress=Component.translatable(ClientState.level==0?"screen.xiuxian.progress_locked":full?"screen.xiuxian.progress_full":"screen.xiuxian.progress",ClientState.points,ClientState.required);
+            g.drawString(font,progress,18,72,0xffc3cec5);
+            double ratio=ClientState.required>0?Math.max(0,Math.min(1,(double)ClientState.points/ClientState.required)):0;
+            bar(g,88,ratio,0xff79b777);
+            g.drawCenteredString(font,String.format(java.util.Locale.ROOT,"%.1f%%",ratio*100),150,90,0xffffffff);
+            var state=ClientState.foundation;
+            Component mana=state==null?Component.translatable("screen.xiuxian.mana_syncing"):Component.translatable("screen.xiuxian.mana",String.format(java.util.Locale.ROOT,"%.1f",state.mana()),String.format(java.util.Locale.ROOT,"%.0f",state.maximum()));
+            g.drawString(font,mana,18,110,0xffb0d8e9);
+            double manaRatio=state!=null&&state.maximum()>0?Math.max(0,Math.min(1,state.mana()/state.maximum())):0;
+            bar(g,124,manaRatio,0xff67b8d6);
+            String health=String.format(java.util.Locale.ROOT,"%.1f / %.1f",minecraft.player.getHealth(),minecraft.player.getMaxHealth());
+            g.drawString(font,Component.translatable("screen.xiuxian.health",health),18,144,0xffead0c5);
+            g.drawString(font,Component.translatable("screen.xiuxian.attack",String.format(java.util.Locale.ROOT,"%.1f",ClientState.attackDamage)),18,159,0xffead0c5);
+            var manual=state==null?null:ManualDefinition.find(state.active());
+            Component manualName=manual==null?Component.translatable("manual.xiuxian.tier_"+ClientState.technique):Component.literal(manual.name());
+            g.drawString(font,Component.translatable("screen.xiuxian.technique",manualName),18,174,0xffc3cec5);
+            if(ClientState.level>0&&!full)g.drawString(font,Component.translatable(ClientState.rate>0?"screen.xiuxian.breathing":"screen.xiuxian.breathing_paused",String.format(java.util.Locale.ROOT,"%.2f",ClientState.rate)),18,190,0xff99ab9d);
+            var food=minecraft.player.getEffect(CultivationResources.NOURISHMENT.get());
+            if(food!=null)g.drawString(font,Component.translatable("screen.xiuxian.food_time",food.getDuration()/20),18,205,0xffc4d998);
+            if(state!=null&&state.blocked()&&!full)g.drawString(font,Component.translatable("screen.xiuxian.manual_gate"),18,219,0xffe2c38d);
+            g.pose().popPose();
+            super.render(g,mouseX,mouseY,partial);
         }
-        @Override public boolean keyPressed(int key, int scan, int mods) {
-            if (STATUS.matches(key, scan)) { onClose(); return true; }
-            return super.keyPressed(key, scan, mods);
+        private void bar(GuiGraphics g,int y,double fraction,int color) {
+            g.fill(18,y,282,y+14,0xff435449);g.fill(19,y+1,281,y+13,0xff0d1712);g.fill(19,y+1,19+(int)(262*fraction),y+13,color);
+        }
+        @Override public boolean keyPressed(int key,int scan,int mods) {
+            if(STATUS.matches(key,scan)){onClose();return true;}
+            return super.keyPressed(key,scan,mods);
         }
     }
     static class FurnaceScreen extends AbstractContainerScreen<FurnaceMenu> {
