@@ -8,13 +8,16 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Registry entries for the first tier of forging content. Gameplay is added separately. */
+/** Registry entries for the first tier of forging content. */
 public final class ForgingContent {
     public static final RegistryObject<Item> SPIRIT_GOLD_INGOT = item("spirit_gold_ingot");
     public static final Map<String, RegistryObject<Item>> BLANKS = new LinkedHashMap<>();
@@ -28,6 +31,14 @@ public final class ForgingContent {
     public static final RegistryObject<Item> BASIC_FORGING_TABLE_ITEM = Xiuxian.ITEMS.register(
         "basic_forging_table",
         () -> new BlockItem(BASIC_FORGING_TABLE.get(), new Item.Properties())
+    );
+    public static final RegistryObject<BlockEntityType<ForgingTableEntity>> ENTITY = Xiuxian.ENTITIES.register(
+        "basic_forging_table",
+        () -> BlockEntityType.Builder.of(ForgingTableEntity::new, BASIC_FORGING_TABLE.get()).build(null)
+    );
+    public static final RegistryObject<MenuType<ForgingMenu>> MENU = Xiuxian.MENUS.register(
+        "basic_forging_table",
+        () -> IForgeMenuType.create(ForgingMenu::new)
     );
 
     static {

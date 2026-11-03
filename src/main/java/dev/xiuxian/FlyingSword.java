@@ -31,7 +31,7 @@ public class FlyingSword extends ThrowableItemProjectile {
         if(returning){
             Vec3 to=owner.getEyePosition().subtract(position());
             if(to.length()<1){discard();return;}
-            setDeltaMovement(to.normalize().scale(1.1));
+            setDeltaMovement(to.normalize().scale(SwordCombat.returnSpeed(owner)));
         }else{
             Vec3 to=target.getBoundingBox().getCenter().subtract(position());
             if(!art.equals("pierce") || tickCount==0) setDeltaMovement(to.normalize().scale(SwordCombat.flightSpeed(owner,art)));

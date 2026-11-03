@@ -29,6 +29,8 @@ public class ClientSetup {
         event.enqueueWork(() -> {
             MenuScreens.register(Xiuxian.FURNACE_MENU.get(), FurnaceScreen::new);
             MenuScreens.register(Alchemy.MENU.get(), AlchemyScreen::new);
+            MenuScreens.register(ForgingContent.MENU.get(), ForgingScreen::new);
+            MenuScreens.register(ForgingContent.MENU.get(), ForgingScreen::new);
             for (var herb : Xiuxian.HERBS.values()) ItemBlockRenderTypes.setRenderLayer(herb.get(), RenderType.cutout());
         });
     }

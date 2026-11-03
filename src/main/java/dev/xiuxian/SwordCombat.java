@@ -47,7 +47,8 @@ public final class SwordCombat {
     static boolean isCurrent(ServerPlayer p,FlyingSword sword){var tag=CultivationFoundation.data(p);return tag.hasUUID("SwordProjection")&&tag.getUUID("SwordProjection").equals(sword.getUUID());}
     static FlyingSword current(ServerPlayer p){var tag=CultivationFoundation.data(p);if(!tag.hasUUID("SwordProjection"))return null;var e=p.serverLevel().getEntity(tag.getUUID("SwordProjection"));return e instanceof FlyingSword sword?sword:null;}
     static String manual(ServerPlayer p){var m=CultivationFoundation.active(p);return m==null?"":m.family();}
-    static double flightSpeed(ServerPlayer p,String art){double speed=manual(p).equals("breeze_sword")?1.35:manual(p).equals("radiant_sword_fragment")?1.6:manual(p).equals("stone_sword")?.85:1.1;return art.equals("pierce")?speed*1.5:speed;}
+    static double flightSpeed(ServerPlayer p,String art){double speed=manual(p).equals("breeze_sword")?1.35:manual(p).equals("radiant_sword_fragment")?1.6:manual(p).equals("stone_sword")?.85:1.1;return (art.equals("pierce")?speed*1.5:speed)*ForgingEffects.flightSpeed(p.getMainHandItem(),art,false,p.isInWater());}
+    static double returnSpeed(ServerPlayer p){return 1.1*ForgingEffects.flightSpeed(p.getMainHandItem(),"recall",true,p.isInWater());}
     static boolean validTarget(ServerPlayer p,LivingEntity target){return target!=p&&target.isAlive()&&!target.isAlliedTo(p)&&!(target instanceof net.minecraft.world.entity.TamableAnimal pet&&pet.isOwnedBy(p))&&(!(target instanceof ServerPlayer other)||p.canHarmPlayer(other));}
     static LivingEntity target(ServerPlayer p){
         Vec3 start=p.getEyePosition(),end=start.add(p.getLookAngle().scale(24));
@@ -106,7 +107,8 @@ public final class SwordCombat {
         String id=strike?"return_strike":"recall";if(!available(p).contains(id))return false;
         var tag=CultivationFoundation.data(p);long now=p.level().getGameTime();if(now<tag.getLong("SwordUntil_"+id))return false;
         double cost=(strike?12:1)*(manual(p).equals("returning_sword")?.6:1);
-        if(!CultivationFoundation.spendMana(p,cost))return false;
+        if(!strike&&ForgingEffects.has(p.getMainHandItem(),"eagle_talon"))cost=Math.max(0,cost-1);
+        if(cost>0&&!CultivationFoundation.spendMana(p,cost))return false;
         sword.art=strike?"return_strike":"recall";sword.returning=true;sword.returnDamage=strike;
         tag=CultivationFoundation.data(p);tag.putLong("SwordUntil_"+id,now+(strike?60:10));CultivationFoundation.save(p,tag);return true;
     }
@@ -125,12 +127,16 @@ public final class SwordCombat {
         String manual=manual(p);
         multiplier*=manual.equals("breeze_sword")?.85:manual.equals("lone_sword")?(art.equals("sweep")?.8:1.25):manual.equals("river_sword")?.95:1;
         if(art.equals("return_strike")&&manual.equals("returning_sword"))multiplier*=1.3;
-        if(art.equals("armor_break")||manual.equals("piercing_sword")){
+        int armorPenalty=Math.max(ForgingEffects.armorPenetration(p.getMainHandItem()),art.equals("armor_break")?4:manual.equals("piercing_sword")?2:0);
+        if(armorPenalty>0){
             var armor=victim.getAttribute(Attributes.ARMOR);
-            if(armor!=null){armor.removeModifier(ARMOR_PENALTY);armor.addTransientModifier(new AttributeModifier(ARMOR_PENALTY,"xiuxian.sword_armor_break",art.equals("armor_break")?-4:-2,AttributeModifier.Operation.ADDITION));victim.getPersistentData().putLong("xiuxian_armor_until",p.level().getGameTime()+60);}
+            if(armor!=null){armor.removeModifier(ARMOR_PENALTY);armor.addTransientModifier(new AttributeModifier(ARMOR_PENALTY,"xiuxian.sword_armor_break",-armorPenalty,AttributeModifier.Operation.ADDITION));victim.getPersistentData().putLong("xiuxian_armor_until",p.level().getGameTime()+60);}
         }
-        float damage=(float)(attackBase(p,victim)*multiplier*power*ManualPractice.power(p));
-        if(victim.hurt(p.damageSources().playerAttack(p),damage)) p.setLastHurtMob(victim);
+        float damage=(float)(attackBase(p,victim)*multiplier*power*ManualPractice.power(p)*ForgingEffects.swordDamageMultiplier(p.getMainHandItem(),victim));
+        p.getPersistentData().putBoolean("xiuxian_forging_projectile_hit",true);
+        boolean hit=victim.hurt(p.damageSources().playerAttack(p),damage);
+        p.getPersistentData().remove("xiuxian_forging_projectile_hit");
+        if(hit){p.setLastHurtMob(victim);ForgingEffects.onSwordHit(p,victim);}
         p.serverLevel().sendParticles(ParticleTypes.CRIT,victim.getX(),victim.getY()+1,victim.getZ(),art.equals("shadows")?18:5,.3,.4,.3,.1);
     }
     @SubscribeEvent public static void guard(LivingHurtEvent event){

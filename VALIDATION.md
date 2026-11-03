@@ -211,3 +211,12 @@ JAR：build/releases/xiuxian-0.3.6.jar。SHA256：2655E51937C097624836684484C436
 JAR：build/releases/xiuxian-0.3.7.jar。SHA256：86ABCB5BDEFAB1BF213EA39D933E9E7B297110C5870DBCBA6BD2BC3D41CE2D45。
 
 客户端安装：旧0.3.2 JAR已备份至E盘，指定Forge 47.4.28客户端mods现只保留xiuxian-0.3.7.jar；安装文件SHA256与构建包一致。未启动用户客户端。
+
+
+## 0.4.0 炼器台注灵（2026-11-04）
+
+ForgeTableBlock现已打开四槽菜单。服务端校验器胚、灵石、材料部位、重复材料、最大两种材料、输出槽和炼器熟练度1/3/6门槛；成功扣料后运行600 tick，输出槽唯一且进度、待炼装备、材料和发起者持久化。中品/上品按所加材料最高来源层确定。JEI登记所有46种单料和240种双料兼容组合。NBT保存最高品级及排序后的材料ID；已实现对应飞剑伤害/速度/控制效果、防具属性和状态时长效果。
+
+Java编译与jar/reobfJar成功，403个资源JSON解析成功，46个兼容效果的中英文翻译键齐全。未运行GameTest或用户客户端。自定义穿戴纹理仍未开发。
+
+JAR：build/releases/xiuxian-0.4.0.jar。SHA256：961C0B4E478C28B2D443EA58BD05481A02A91173D80A636920EA2AF582DD5144。未替换客户端JAR。

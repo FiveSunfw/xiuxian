@@ -77,7 +77,7 @@ public final class CultivationFoundation {
         save(player, tag);
         return select(player, id);
     }
-    public static double maxMana(Player player) { return Cultivation.initiated(player) ? 80 + Cultivation.progress(player).level() * 20 : 0; }
+    public static double maxMana(Player player) { return Cultivation.initiated(player) ? 80 + Cultivation.progress(player).level() * 20 + ForgingEffects.maxManaBonus(player) : 0; }
     public static double mana(Player player) { return Math.min(maxMana(player), Math.max(0, data(player).getDouble("Mana"))); }
     public static boolean spendMana(ServerPlayer player, double amount) {
         if (!Double.isFinite(amount) || amount <= 0 || mana(player) < amount) return false;
