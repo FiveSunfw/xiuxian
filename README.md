@@ -1,4 +1,4 @@
-# 修仙 0.3.0 · 炼气与一阶妖兽
+# 修仙 0.3.1 · 炼气与一阶妖兽
 
 Minecraft Java 1.20.1 / Forge，模组 ID `xiuxian`。开发基线 Forge 47.3.0，用户试玩环境为 Forge 47.4.28。
 
@@ -110,7 +110,7 @@ node scripts/generate-resources.cjs
 node scripts/validate-content.cjs
 ```
 
-Java 17 位于项目 `.tools/jdk-17...`，工具、缓存和产物均在 E 盘。成品为 `build/libs/xiuxian-0.3.0.jar`。JEI 15.74.0.233 仅作可选 API 编译引用，不随包分发。
+Java 17 位于项目 `.tools/jdk-17...`，工具、缓存和产物均在 E 盘。成品为 `build/libs/xiuxian-0.3.1.jar`。JEI 15.74.0.233 仅作可选 API 编译引用，不随包分发。
 
 用户自行进行客户端试玩，独立服和双人联机验收后续进行。实际检查记录见 `VALIDATION.md`。源码含炉子与玩家属性的 GameTest，具体执行结果见验证记录。原创部分暂保留所有权利，Forge MDK 许可见 `LICENSE.txt`。
 
@@ -288,3 +288,27 @@ Java 17 位于项目 `.tools/jdk-17...`，工具、缓存和产物均在 E 盘�
 新增18种种属材料，保底与概率掉落按TIER_ONE_BEASTS.md数量表实现，暂无用途和配方。声音使用原版音效组合，模型和64×64贴图为基础方块版本。真实观感、密度与战斗平衡等待试玩。
 
 引导书增加“妖兽”入口和三组双页章节，旧书动态更新。刷怪蛋与材料可在创造栏查询。安装见INSTALL_0.3.0.md。
+
+## 方块ID和 /give 命令（0.3.1）
+
+所有模组方块都属于 xiuxian 命名空间。命令输入英文ID，中文名称仅供辨认。例如 /give @s xiuxian:herbal_furnace 或 /give @s xiuxian:depleted_deepslate_spirit_ore。创造模式新增独立“修仙”页签，可按中文名称查找。
+
+| 中文名称 | /give 使用的完整ID |
+| --- | --- |
+| 引气草 | xiuxian:qi_herb |
+| 青木芝 | xiuxian:greenwood_fungus |
+| 凝霜草 | xiuxian:frost_herb |
+| 石髓花 | xiuxian:stone_marrow_flower |
+| 赤阳草 | xiuxian:scarlet_sun_herb |
+| 泽兰草 | xiuxian:marsh_orchid |
+| 碧潮草 | xiuxian:tide_herb |
+| 幽光苔 | xiuxian:glow_moss |
+| 基础炼药炉 | xiuxian:herbal_furnace |
+| 基础炼丹炉 | xiuxian:basic_alchemy_furnace |
+| 灵石矿 | xiuxian:spirit_stone_ore |
+| 深层灵石矿 | xiuxian:deepslate_spirit_stone_ore |
+| 灵脉核心 | xiuxian:spirit_vein_core |
+| 枯竭灵石矿 | xiuxian:depleted_spirit_ore |
+| 深层枯竭灵石矿 | xiuxian:depleted_deepslate_spirit_ore |
+
+自然灵脉的核心与矿石再生关联其生成记录。通过命令领取并放置的核心可以展示方块，但不会凭空生成一条灵脉。

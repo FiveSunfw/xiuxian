@@ -142,7 +142,7 @@ public class GuideScreen extends Screen {
                     case 13 -> new net.minecraft.world.level.ItemLike[]{FoundationItems.BLANK.get(), FoundationItems.TESTER.get(), FoundationItems.MANUALS.get("basic_sword").get()};
                     case 14 -> new net.minecraft.world.level.ItemLike[]{Items.WHEAT, Items.APPLE, CultivationResources.MEAL.get()};
                     case 15 -> new net.minecraft.world.level.ItemLike[]{Alchemy.FURNACE_ITEM.get(), Alchemy.item("qi_gathering_formula"), CultivationResources.PILL.get(), Alchemy.item("pill_residue")};
-                    default -> new net.minecraft.world.level.ItemLike[]{CultivationResources.ORE_ITEM.get(), VeinBlocks.CORE_ITEM.get(), VeinBlocks.DEPLETED_ITEM.get()};
+                    default -> new net.minecraft.world.level.ItemLike[]{CultivationResources.ORE_ITEM.get(), VeinBlocks.CORE_ITEM.get(), VeinBlocks.DEPLETED_ITEM.get(), VeinBlocks.DEEP_DEPLETED_ITEM.get()};
                 };
                 for (int i=0;i<items.length;i++) icon(g, new ItemStack(items[i]), 239+(i%2)*76, 79+(i/2)*82, 48);
             } else if (page == 10) {

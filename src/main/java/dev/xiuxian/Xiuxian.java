@@ -2,6 +2,8 @@ package dev.xiuxian;
 
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.registries.*;
@@ -20,6 +22,20 @@ public class Xiuxian {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ID);
     public static final DeferredRegister<BlockEntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ID);
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, ID);
+    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ID);
+    public static final RegistryObject<CreativeModeTab> TAB = TABS.register("xiuxian", () -> CreativeModeTab.builder()
+        .title(Component.translatable("itemGroup.xiuxian"))
+        .icon(() -> new ItemStack(Xiuxian.HERB_ITEM.get()))
+        .displayItems((parameters, output) -> {
+            for (HerbKind kind : HerbKind.values()) { output.accept(Xiuxian.HERB_ITEMS.get(kind).get()); output.accept(Xiuxian.ELIXIRS.get(kind).get()); }
+            output.accept(Xiuxian.FURNACE_ITEM.get()); output.accept(Alchemy.FURNACE_ITEM.get()); output.accept(CultivationResources.SPIRIT_COPPER.get());
+            for (var item : java.util.List.of(CultivationResources.ORE_ITEM, CultivationResources.DEEP_ORE_ITEM, VeinBlocks.CORE_ITEM, VeinBlocks.DEPLETED_ITEM, VeinBlocks.DEEP_DEPLETED_ITEM, CultivationResources.STONE, CultivationResources.STONE_2, CultivationResources.PILL, CultivationResources.MEAL)) output.accept(item.get());
+            output.accept(FoundationItems.BLANK.get()); output.accept(FoundationItems.TESTER.get());
+            for (var manual : FoundationItems.MANUALS.values()) output.accept(manual.get());
+            for (var item : Alchemy.ITEMS.values()) output.accept(item.get());
+            for (var egg : Beasts.EGGS.values()) output.accept(egg.get());
+            for (var material : Beasts.MATERIALS.values()) output.accept(material.get());
+        }).build());
     public static final Map<HerbKind, RegistryObject<Block>> HERBS = new EnumMap<>(HerbKind.class);
     public static final Map<HerbKind, RegistryObject<Item>> HERB_ITEMS = new EnumMap<>(HerbKind.class);
     public static final Map<HerbKind, RegistryObject<Item>> ELIXIRS = new EnumMap<>(HerbKind.class);
@@ -45,14 +61,7 @@ public class Xiuxian {
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Cultivation.CONFIG);
         Cultivation.registerNetwork();
-        bus.addListener((net.minecraftforge.event.BuildCreativeModeTabContentsEvent e) -> {
-            if (e.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
-                for (HerbKind kind : HerbKind.values()) { e.accept(HERB_ITEMS.get(kind)); e.accept(ELIXIRS.get(kind)); }
-                for(var egg:Beasts.EGGS.values()) e.accept(egg); for(var material:Beasts.MATERIALS.values())e.accept(material); e.accept(FoundationItems.BLANK); e.accept(FoundationItems.TESTER); for(var manual:FoundationItems.MANUALS.values()) e.accept(manual);
-                e.accept(FURNACE_ITEM); e.accept(CultivationResources.SPIRIT_COPPER); e.accept(Alchemy.FURNACE_ITEM); for(var item:Alchemy.ITEMS.values()) e.accept(item); e.accept(VeinBlocks.CORE_ITEM); e.accept(VeinBlocks.DEPLETED_ITEM);
-                for (var item : java.util.List.of(CultivationResources.ORE_ITEM, CultivationResources.DEEP_ORE_ITEM, CultivationResources.STONE, CultivationResources.STONE_2, CultivationResources.PILL, CultivationResources.MEAL)) e.accept(item);
-            }
-        });
+        TABS.register(bus);
     }
 }
 

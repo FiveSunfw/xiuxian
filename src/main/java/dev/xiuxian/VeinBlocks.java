@@ -18,6 +18,7 @@ public final class VeinBlocks {
     public static final RegistryObject<Block> DEEP_DEPLETED=Xiuxian.BLOCKS.register("depleted_deepslate_spirit_ore",()->new Block(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_IRON_ORE)));
     public static final RegistryObject<Item> CORE_ITEM=Xiuxian.ITEMS.register("spirit_vein_core",()->new BlockItem(CORE.get(),new Item.Properties()));
     public static final RegistryObject<Item> DEPLETED_ITEM=Xiuxian.ITEMS.register("depleted_spirit_ore",()->new BlockItem(DEPLETED.get(),new Item.Properties()));
+    public static final RegistryObject<Item> DEEP_DEPLETED_ITEM=Xiuxian.ITEMS.register("depleted_deepslate_spirit_ore",()->new BlockItem(DEEP_DEPLETED.get(),new Item.Properties()));
     public static final RegistryObject<BlockEntityType<CoreEntity>> ENTITY=Xiuxian.ENTITIES.register("spirit_vein_core",()->BlockEntityType.Builder.of(CoreEntity::new,CORE.get()).build(null));
     static void register() {}
     static final class CoreBlock extends BaseEntityBlock {

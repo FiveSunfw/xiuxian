@@ -157,3 +157,9 @@ JAR SHA256：01CA9F53C9DECEE4E8F3843821F1942FED507F5112C1497ACBFF9DA0293C5B06。
 JAR SHA256：DC9FBD364D0ADBFB0B164468624D0FAE073DD356A47B8CDB1FE37DD2E7AC69EF。
 
 客户端安装完成，JAR哈希一致，旧0.2.0备份到E盘并移出mods，0.3.0 ZIP包含JAR、安装说明和许可信息。
+
+## 0.3.1 方块ID与创造页签补丁（2026-11-03）
+确认15个模组方块均属于xiuxian命名空间。缺失的是depleted_deepslate_spirit_ore同名BlockItem，已补齐。新增GameTest验证所有方块都有同ID物品、BlockItem放置对应原方块、/give命令解析成功，并验证独立修仙创造页签注册。构建成功，34项必需GameTest通过，344个JSON资源检查通过。未改动任何既有方块的ID。客户端页签视觉及命令实际操作留待用户试玩。
+JAR SHA256：AB8384872E54AA00123525558750E95C0251700D4744AD3EB633EBE8FEC20921。
+
+客户端已更新，安装JAR与构建文件哈希一致，0.3.0已备份到E盘并移出mods。ZIP包括新版JAR、安装说明和许可文件。

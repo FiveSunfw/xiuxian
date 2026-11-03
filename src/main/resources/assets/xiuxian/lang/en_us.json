@@ -328,6 +328,7 @@
   "guide.xiuxian.new_26_right": "当前法诀等级与进度在K面板显示。\n\n境界卡层或九层圆满后，仍能吐纳补练法诀。修为不会继续溢出积累。\n\n基础进度需求300×下一等级，数值可配置。",
   "manual.xiuxian.missing_page": "此残篇缺少这一层的技法页，需要寻找更完整的同部功法。",
   "manual.xiuxian.sword_controls": "主手持原版剑。%s切换，%s施展，%s归剑。",
+  "itemGroup.xiuxian": "Xiuxian",
   "entity.xiuxian.spirit_hare": "spirit hare",
   "item.xiuxian.spirit_hare_spawn_egg": "spirit hare spawn egg",
   "entity.xiuxian.azure_fang_wolf": "azure fang wolf",
