@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "xiuxian:earth_metal"
+    },
+    {
+      "item": "xiuxian:blank_manual"
+    },
+    {
+      "item": "minecraft:ink_sac"
+    }
+  ],
+  "result": {
+    "item": "xiuxian:earth_metal",
+    "count": 2
+  }
+}

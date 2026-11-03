@@ -107,3 +107,4 @@ require('./generate-veins.cjs')({json,png,a,d});
 
 require("./generate-alchemy.cjs")({json,png,a,d});
 require('./generate-alchemy-content.cjs')({json,png,a,d});
+require('./generate-foundation.cjs')({json,png,a,d});

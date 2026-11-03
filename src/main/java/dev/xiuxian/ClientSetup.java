@@ -47,17 +47,20 @@ public class ClientSetup {
     }
     static class StatusScreen extends Screen {
         StatusScreen() { super(Component.translatable("screen.xiuxian.status")); }
+        @Override protected void init() {
+            addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.translatable("screen.xiuxian.manuals"), b -> minecraft.setScreen(new ManualScreen())).bounds(width/2-132,height/2+100,264,20).build());
+        }
         @Override public boolean isPauseScreen() { return false; }
         @Override public void render(GuiGraphics g, int mouseX, int mouseY, float partial) {
             renderBackground(g);
-            int x = width / 2 - 150, y = height / 2 - 105;
-            g.fill(x-1, y-1, x+301, y+211, 0xff709c82);
-            g.fill(x, y, x+300, y+210, 0xff17251f);
+            int x = width / 2 - 150, y = height / 2 - 128;
+            g.fill(x-1, y-1, x+301, y+256, 0xff709c82);
+            g.fill(x, y, x+300, y+255, 0xff17251f);
             g.drawCenteredString(font, title, width/2, y+15, 0xffd7f0bd);
             g.drawString(font, Component.translatable("screen.xiuxian.player", minecraft.player.getName()), x+18, y+40, 0xffffff);
             Component realm = Component.translatable(ClientState.level > 0 ? "realm.xiuxian.qi_" + ClientState.level : "screen.xiuxian.mortal");
             g.drawString(font, realm, x+18, y+61, 0xffd7f0bd);
-            boolean full = ClientState.level >= CultivationProgress.MAX_LEVEL;
+            boolean full = ClientState.level == 9 && ClientState.required > 0 && ClientState.points >= ClientState.required;
             Component progress = Component.translatable(ClientState.level == 0 ? "screen.xiuxian.progress_locked" : full ? "screen.xiuxian.progress_full" : "screen.xiuxian.progress", ClientState.points, ClientState.required);
             g.drawString(font, progress, x+18, y+82, 0xffc3cec5);
             double ratio = full ? 1 : ClientState.required > 0 ? (double) ClientState.points / ClientState.required : 0;
@@ -77,6 +80,11 @@ public class ClientSetup {
             }
             var food = minecraft.player.getEffect(CultivationResources.NOURISHMENT.get());
             if (food != null) g.drawString(font, Component.translatable("screen.xiuxian.food_time", food.getDuration() / 20), x+18, y+193, 0xffc4d998);
+            var state = ClientState.foundation;
+            if (state != null) {
+                g.drawString(font, Component.translatable("screen.xiuxian.mana", (int)state.mana(), (int)state.maximum()), x+18, y+209, 0xffb0d8e9);
+                if (state.blocked() && !full) g.drawString(font, Component.translatable("screen.xiuxian.manual_gate"), x+18, y+223, 0xffe2c38d);
+            }
             super.render(g, mouseX, mouseY, partial);
         }
         @Override public boolean keyPressed(int key, int scan, int mods) {

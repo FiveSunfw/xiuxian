@@ -17,7 +17,7 @@ module.exports=function({json,png,a,d}){
  json(`${d}/forge/biome_modifier/spirit_stones.json`,{type:'forge:add_features',biomes:'#minecraft:is_overworld',features:types.map(t=>'xiuxian:'+t[0]),step:'underground_ores'});
  json(`${d}/tags/items/introductory_herbs.json`,{replace:false,values:require('./herbs.cjs').map(h=>'xiuxian:'+h.id)});
  json(`${d}/recipes/spirit_stone_tier_2.json`,{type:'minecraft:crafting_shaped',pattern:['SSS','SSS','SSS'],key:{S:{item:'xiuxian:spirit_stone'}},result:{item:'xiuxian:spirit_stone_tier_2'}});
- for(let tier=1;tier<=3;tier++){const key={S:{item:tier===1?'xiuxian:spirit_stone':'xiuxian:spirit_stone_tier_2'},B:{item:'minecraft:book'}};if(tier>1)key.M={item:tier===2?'minecraft:gold_ingot':'minecraft:diamond'};json(`${d}/recipes/breathing_manual_${tier}.json`,{type:'minecraft:crafting_shaped',pattern:tier===1?[' S ','SBS',' S ']:['MSM','SBS','MSM'],key,result:{item:`xiuxian:breathing_manual_${tier}`}});}
+
  json(`${d}/recipes/spirit_meal.json`,{type:'minecraft:crafting_shapeless',ingredients:[{tag:'xiuxian:introductory_herbs'},{item:'minecraft:wheat'},{item:'minecraft:apple'},{item:'minecraft:bowl'}],result:{item:'xiuxian:spirit_meal'}});
  for(const id of ['spirit_stone','spirit_stone_tier_2'])png('item/'+id,(x,y)=>{const big=id.endsWith('2');if(Math.abs(x-7.5)+(Math.abs(y-7.5)*0.65)>5||y<1||y>14)return[0,0,0,0];if(x<7)return[247,250,248,255];return big?[197,213,230,255]:[181,207,214,255];});
  png('item/qi_gathering_pill',(x,y)=>Math.hypot(x-7.5,y-7.5)<5?[(x+y)%3?199:238,151,68,255]:[0,0,0,0]);

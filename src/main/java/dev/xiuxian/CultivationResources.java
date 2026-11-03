@@ -32,7 +32,7 @@ public final class CultivationResources {
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> MEDIUM = FEATURES.register("medium_spirit_vein", () -> new SpiritVeinFeature(32, 48));
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> LARGE = FEATURES.register("large_spirit_vein", () -> new SpiritVeinFeature(64, 96));
     private CultivationResources() {}
-    public static void register(net.minecraftforge.eventbus.api.IEventBus bus) { Alchemy.register(); VeinBlocks.register(); EFFECTS.register(bus); FEATURES.register(bus); }
+    public static void register(net.minecraftforge.eventbus.api.IEventBus bus) { FoundationItems.register(); Alchemy.register(); VeinBlocks.register(); EFFECTS.register(bus); FEATURES.register(bus); }
     private static class Nourishment extends MobEffect { Nourishment() { super(MobEffectCategory.BENEFICIAL, 0xc4d998); } }
     private static class SpiritMeal extends BowlFoodItem {
         SpiritMeal() { super(new Item.Properties().stacksTo(1).food(new FoodProperties.Builder().nutrition(6).saturationMod(0.6f).alwaysEat().build())); }

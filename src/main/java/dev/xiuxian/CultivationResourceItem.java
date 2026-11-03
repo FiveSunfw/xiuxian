@@ -20,8 +20,8 @@ public class CultivationResourceItem extends Item {
             if (!player.level().isClientSide) player.displayClientMessage(Component.translatable("message.xiuxian.need_initiation"), true);
             return false;
         }
-        if (Cultivation.progress(player).level() >= CultivationProgress.MAX_LEVEL) {
-            if (!player.level().isClientSide) player.displayClientMessage(Component.translatable("screen.xiuxian.progress_full"), true);
+        if (CultivationFoundation.blocked(player)) {
+            if (!player.level().isClientSide) player.displayClientMessage(Component.translatable(Cultivation.progress(player).level() == 9 ? "screen.xiuxian.progress_full" : "screen.xiuxian.manual_gate"), true);
             return false;
         }
         return true;
@@ -52,7 +52,7 @@ public class CultivationResourceItem extends Item {
                 // Include thresholds crossed by this dose, and exclude points discarded at the cap.
                 long gained = (long) after.points() - before.points()
                     + (long) base * (after.level() * (after.level() - 1) - before.level() * (before.level() - 1)) / 2;
-                Component progress = after.level() == CultivationProgress.MAX_LEVEL
+                Component progress = after.level() == CultivationProgress.MAX_LEVEL && after.full(base)
                     ? Component.translatable("screen.xiuxian.progress_full")
                     : Component.literal(after.points() + " / " + after.required(base));
                 player.displayClientMessage(Component.translatable("message.xiuxian.pill_progress", gained, after.level(), progress), false);

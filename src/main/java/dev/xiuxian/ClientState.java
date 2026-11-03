@@ -2,10 +2,11 @@ package dev.xiuxian;
 
 // Only the local player's server-synchronized display state.
 public final class ClientState {
+    public static CultivationFoundation.State foundation;
     public static int level, points, required, technique;
     public static double rate;
     public static double attackDamage = 1;
-    public static void clear() { level = 0; points = 0; required = 0; attackDamage = 1; technique = 0; rate = 0; }
+    public static void clear() { foundation = null; level = 0; points = 0; required = 0; attackDamage = 1; technique = 0; rate = 0; }
     private ClientState() {}
 }
 

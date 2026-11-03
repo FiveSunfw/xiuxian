@@ -57,7 +57,7 @@ public class GrowthResourceGameTests {
         h.assertTrue(Cultivation.progress(p).points() == Cultivation.STONE_POINTS.get()+Cultivation.PILL_POINTS.get(), "Pill must add progress");
         FakePlayer mortal = player(h, "MortalBoostTest", false);
         h.assertTrue(!Cultivation.addProgress(mortal, 100), "Cannot bypass initiation with cultivation resources");
-        CompoundTag tag = p.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG); tag.putInt("xiuxian_level", 9);
+        CompoundTag tag = p.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG); tag.putInt("xiuxian_level", 9); tag.putInt("xiuxian_progress", Cultivation.progressBase() * 9);
         p.getPersistentData().put(Player.PERSISTED_NBT_TAG, tag);
         ItemStack full = new ItemStack(CultivationResources.PILL.get()); full.finishUsingItem(h.getLevel(), p);
         h.assertTrue(full.getCount() == 1, "Do not consume at full realm");
