@@ -220,3 +220,31 @@ ForgeTableBlock现已打开四槽菜单。服务端校验器胚、灵石、材�
 Java编译与jar/reobfJar成功，403个资源JSON解析成功，46个兼容效果的中英文翻译键齐全。未运行GameTest或用户客户端。自定义穿戴纹理仍未开发。
 
 JAR：build/releases/xiuxian-0.4.0.jar。SHA256：961C0B4E478C28B2D443EA58BD05481A02A91173D80A636920EA2AF582DD5144。未替换客户端JAR。
+
+
+2026-11-04客户端安装：发现客户端仍为0.3.7；已备份旧包并替换为0.4.0，SHA256为961C0B4E478C28B2D443EA58BD05481A02A91173D80A636920EA2AF582DD5144，与构建包一致。未启动客户端。
+
+
+## 0.4.1 创造页签排序（2026-11-04）
+
+注册的修仙创造页签增加排序约束，位于原版建筑方块页签前；图标改为灵石，内容改为自动收集模组注册物品。Java编译和jar/reobfJar成功；未启动客户端或运行GameTest，真实页签位置待用户确认。0.4.0已备份至build/releases/xiuxian-0.4.0-client-before-0.4.1.jar，客户端已安装0.4.1，哈希与构建包一致：ABA5E09848A6CC0EA18BD86D4C9A17D605249FDF94C1A6CABBAD0C8AF76683CD。
+
+
+## 0.4.2 创造页签排序循环修复（2026-11-04）
+
+用户0.4.1崩溃日志显示CreativeModeTabRegistry发生CyclePresentException。已移除新增的页签排序约束，保留页签及物品收集。Java编译和JAR打包通过；客户端已替换0.4.2，SHA256：E58F6EE6FB78388E74D0E99CB66E34CB3612DC6213FDB25D3ECBA7CD128FA08B；0.4.1已备份。未启动客户端或运行游戏测试，启动与页签可见性待用户确认。
+
+
+## 0.4.3 炼器界面重复注册修复（2026-11-04）
+
+用户日志定位到ClientSetup的炼器台MenuScreens重复注册。已删除重复调用并检查源码只剩一次。Java编译和jar/reobfJar成功；0.4.2备份至E盘，客户端已安装0.4.3，SHA256：0B04FA6AF9665B3019156922BBB173D0CDA93BEDA77988D53C83D7C373EEC252。未启动客户端，实际启动和页签/炼器台界面仍待用户确认。
+
+
+## 0.4.4 炼器熟练度书内引导（2026-11-04）
+
+依据ForgingSkill与炼器完成逻辑更新《炼器指南》第一页中英文文案。jar/reobfJar成功；客户端已备份0.4.3并安装0.4.4，SHA256：4B60AC92852F45778D66823E53FF96DC1CD9827BB37B891F91DC0FA2282CFBA9。未启动客户端或运行游戏测试。
+
+
+## 0.4.5 炼器成品槽同步修复（2026-11-04）
+
+修复ForgingTableEntity.setItem拦截输出槽和忙碌状态下客户端同步。新增GameTest模拟完成注灵、NBT保存恢复、通过Slot.set同步输出与取出，并检查输出槽拒绝玩家插入；37项必需GameTest通过。JAR构建成功并已安装客户端，SHA256：467A4814793924A695398BAD1824AC7B947A52DB298E091AB05F7F46E842FBC5；旧包已备份至E盘。未启动用户客户端。

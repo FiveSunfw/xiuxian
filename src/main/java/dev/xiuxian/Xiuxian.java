@@ -25,21 +25,11 @@ public class Xiuxian {
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ID);
     public static final RegistryObject<CreativeModeTab> TAB = TABS.register("xiuxian", () -> CreativeModeTab.builder()
         .title(Component.translatable("itemGroup.xiuxian"))
-        .icon(() -> new ItemStack(Xiuxian.HERB_ITEM.get()))
+        .icon(() -> new ItemStack(CultivationResources.STONE.get()))
         .displayItems((parameters, output) -> {
-            for (HerbKind kind : HerbKind.values()) { output.accept(Xiuxian.HERB_ITEMS.get(kind).get()); output.accept(Xiuxian.ELIXIRS.get(kind).get()); }
-            output.accept(Xiuxian.FURNACE_ITEM.get()); output.accept(Alchemy.FURNACE_ITEM.get()); output.accept(CultivationResources.SPIRIT_COPPER.get());
-            for (var item : java.util.List.of(CultivationResources.ORE_ITEM, CultivationResources.DEEP_ORE_ITEM, VeinBlocks.CORE_ITEM, VeinBlocks.DEPLETED_ITEM, VeinBlocks.DEEP_DEPLETED_ITEM, CultivationResources.STONE, CultivationResources.STONE_2, CultivationResources.PILL, CultivationResources.MEAL)) output.accept(item.get());
-            output.accept(FoundationItems.BLANK.get()); output.accept(FoundationItems.TESTER.get());
-            for (var manual : FoundationItems.MANUALS.values()) output.accept(manual.get());
-            for (var item : Alchemy.ITEMS.values()) output.accept(item.get());
-            for (var egg : Beasts.EGGS.values()) output.accept(egg.get());
-            for (var material : Beasts.MATERIALS.values()) output.accept(material.get());
-            output.accept(ForgingContent.BASIC_FORGING_TABLE_ITEM.get());
-            output.accept(ForgingContent.SPIRIT_GOLD_INGOT.get());
-            for (var item : ForgingContent.BLANKS.values()) output.accept(item.get());
-            for (var item : ForgingContent.ARMOR.values()) output.accept(item.get());
-            for (var item : ForgingContent.SWORDS.values()) output.accept(item.get());
+            ITEMS.getEntries().stream()
+                .sorted(java.util.Comparator.comparing(entry -> entry.getId().getPath()))
+                .forEach(entry -> output.accept(entry.get()));
         }).build());
     public static final Map<HerbKind, RegistryObject<Block>> HERBS = new EnumMap<>(HerbKind.class);
     public static final Map<HerbKind, RegistryObject<Item>> HERB_ITEMS = new EnumMap<>(HerbKind.class);

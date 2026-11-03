@@ -132,7 +132,8 @@ public final class ForgingTableEntity extends BlockEntity implements Container, 
         return ContainerHelper.takeItem(items, slot);
     }
     @Override public void setItem(int slot, ItemStack stack) {
-        if (busy() || slot == 3) return;
+        // Menu slot synchronization also uses setItem on the client, including the output slot.
+        // Player and automation insertion restrictions belong in Slot.mayPlace/canPlaceItem.
         items.set(slot, stack);
         stack.setCount(Math.min(stack.getCount(), getMaxStackSize()));
         setChanged();

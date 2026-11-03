@@ -412,7 +412,7 @@
   "item.xiuxian.jade_python_binding_sword": "Jade Python Binding Sword (Greater)",
   "item.xiuxian.redtail_flame_sword": "Redtail Flame Sword (Middle)",
   "guide.xiuxian.forging_title": "Forging Guide",
-  "guide.xiuxian.forging_1": "Getting Started\n\nUse a Basic Forging Table to infuse spirit gold equipment.\n\nPrepare a blank, a spirit stone, and a beast material.",
+  "guide.xiuxian.forging_1": "Forging skill\n\nYour starting level is 1. Each completed infusion raises the initiating player by one level, up to level 9.\n\nMiddle-grade materials require level 3; upper-grade materials require level 6. Your level is shown in the forging table.",
   "guide.xiuxian.forging_2": "Input Slots\n\nEquipment: a spirit gold blank or infused equipment.\n\nStone: an ordinary spirit stone.\n\nMaterial: one beast material.",
   "guide.xiuxian.forging_3": "Start and collect\n\nThe preview shows the new affix and resulting quality. Review it, then click Start Infusion.\n\nInfusion takes 30 seconds. Take the finished item from the output slot before starting again.",
   "guide.xiuxian.forging_4": "Materials and slots\n\nBeast materials support different equipment slots. Incompatible combinations are rejected.\n\nAn item cannot use the same material twice.",

@@ -412,7 +412,7 @@
   "item.xiuxian.jade_python_binding_sword": "碧蟒缠剑·上",
   "item.xiuxian.redtail_flame_sword": "赤尾火剑·中",
   "guide.xiuxian.forging_title": "炼器指南",
-  "guide.xiuxian.forging_1": "炼器入门\n\n基础炼器台用于给灵金装备注灵。\n\n准备一件灵金器胚、普通灵石和妖兽材料。剑修与术修都可学习炼器。",
+  "guide.xiuxian.forging_1": "炼器熟练度\n\n初始为1级。每完成一次注灵，发起炼器的玩家升1级，最高9级。\n\n中品材料需要3级，上品材料需要6级。\n\n等级显示在炼器台界面。",
   "guide.xiuxian.forging_2": "放入物品\n\n器胚位：放灵金剑胚或四种防具胚，也可放已注灵的装备。\n\n灵石位：放普通灵石。\n\n材料位：放一种妖兽专属材料。",
   "guide.xiuxian.forging_3": "开始与取出\n\n预览会显示本次新增的词条效果与装备品级。确认后点击“开始炼器”。\n\n每次注灵需要30秒。完成后从成品槽取走装备，再继续下一次。",
   "guide.xiuxian.forging_4": "材料与部位\n\n不同妖兽材料适用于不同装备部位。若不兼容、更换材料即可；系统会阻止无效组合。\n\n同件装备不能重复使用同一种材料。",
