@@ -1,6 +1,6 @@
 # 协作开发
 
-本项目是 Minecraft Java 1.20.1 / Forge 47.x 模组，使用 Java 17 和 Gradle Wrapper。当前功能源码在 `codex/forging-equipment` 分支；`main` 是较早的稳定基线，合并前需要先核对版本与试玩结果。仓库目前没有远端地址。
+本项目是 Minecraft Java 1.20.1 / Forge 47.x 模组，使用 Java 17 和 Gradle Wrapper。当前 `main` 已包含 0.3.7 炼器装备与资源。新任务从 `main` 创建功能分支，验证后再合并回 `main`。仓库目前没有远端地址。
 
 ## 获取与构建
 
