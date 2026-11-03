@@ -57,8 +57,9 @@ public final class CultivationFoundation {
         var manual = ManualDefinition.find(id);
         if (manual == null || !known(player).contains(id) || !Cultivation.initiated(player)) return false;
         CompoundTag tag = data(player);
-        if (!id.equals(tag.getString("Active"))) { ManualPractice.reset(tag); tag.putInt("SelectedSpell",0); }
+        if (active(player)==null || !manual.family().equals(active(player).family())) { ManualPractice.reset(tag); tag.putInt("SelectedSpell",0); }
         tag.putString("Active", id);
+        if(manual.sword()){int pages=SpellManuals.learned(player,id);tag.putString("SwordArt",(pages&1)!=0?SwordPages.art(manual,0):(pages&2)!=0&&manual.coverage()>=6?SwordPages.art(manual,1):"recall");}
         save(player, tag);
         Cultivation.reconcileManual(player);
         Cultivation.sync(player);

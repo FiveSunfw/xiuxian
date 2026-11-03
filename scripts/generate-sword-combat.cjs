@@ -2,8 +2,6 @@ module.exports=function({json,png,a,d}){
  const fs=require('fs');const arts=[['drive','驭剑诀','iron_ingot'],['recall','归剑诀','string'],['pierce','贯虹诀','arrow'],['sweep','横扫诀','flint'],['combo','连锋诀','feather'],['armor_break','破甲诀','iron_pickaxe'],['guard','护身剑诀','shield'],['intercept','截击诀','flint_and_steel'],['return_strike','回锋诀','fishing_rod'],['shadows','分光诀','amethyst_shard'],['charge','蓄势诀','blaze_powder'],['step','踏锋步','rabbit_foot']];
  for(let i=0;i<arts.length;i++){const[id,name,catalyst]=arts[i];
   json(`${a}/models/item/sword_art_${id}.json`,{parent:'minecraft:item/generated',textures:{layer0:`xiuxian:item/sword_arts/${id}`}});
-  json(`${d}/recipes/sword_art_${id}.json`,{type:'minecraft:crafting_shapeless',ingredients:[{item:'xiuxian:blank_manual'},{item:'minecraft:ink_sac'},{item:'xiuxian:spirit_stone'},{item:'minecraft:'+catalyst}],result:{item:'xiuxian:sword_art_'+id}});
-  json(`${d}/recipes/copy_sword_art_${id}.json`,{type:'minecraft:crafting_shapeless',ingredients:[{item:'xiuxian:sword_art_'+id},{item:'xiuxian:blank_manual'},{item:'minecraft:ink_sac'}],result:{item:'xiuxian:sword_art_'+id,count:2}});
   png('item/sword_arts/'+id,(x,y)=>{if(x<3||x>13||y<1||y>14)return[0,0,0,0];if(x<5)return[69,83,91,255];if(x===12&&y<6)return[224,207,155,255];if(x+y===17&&y>5||x===8&&y>7&&y<12)return[213,231,238,255];if(y===13&&x>5&&x<6+i%6)return[196,161,89,255];return[48+i*3,76+i*2,95+i*3,255];});
  }
  const zh={

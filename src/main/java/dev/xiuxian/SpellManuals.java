@@ -18,9 +18,10 @@ public final class SpellManuals {
     public record BookAction(String id,InteractionHand hand,int action){}
     public record Cast(boolean cycle){}
     public static State client;
-    public static int learned(net.minecraft.world.entity.player.Player p,String id){return CultivationFoundation.data(p).getInt("SpellPages_"+id)&3;}
+    public static int learned(net.minecraft.world.entity.player.Player p,String id){return ManualDefinition.find(id)==null?0:CultivationFoundation.data(p).getInt("SpellPages_"+ManualDefinition.find(id).family())&3;}
     public static String element(ManualDefinition manual,int page){return manual.elements().get(page==1&&manual.elements().size()>1?1:0);}
     public static String name(ManualDefinition m,int page){
+        if(m.sword())return SwordArt.find(SwordPages.art(m,page)).name();
         return switch(element(m,page)){
             case "金"->page==0?"金刃术":"金针雨";case "木"->page==0?"木刺术":"荆棘术";
             case "水"->page==0?"水箭术":"涌浪术";case "火"->page==0?"火弹术":"炎环术";
@@ -46,15 +47,15 @@ public final class SpellManuals {
             .consumerMainThread((m,c)->{var p=c.get().getSender();if(p!=null){if(m.cycle)cycle(p);else cast(p);}c.get().setPacketHandled(true);}).add();
     }
     public static void sync(ServerPlayer p){var m=CultivationFoundation.active(p);var tag=CultivationFoundation.data(p);Cultivation.CHANNEL.send(PacketDistributor.PLAYER.with(()->p),new State(ManualPractice.rank(p),ManualPractice.points(p),ManualPractice.required(p),m==null?0:learned(p,m.id()),tag.getInt("SelectedSpell")&1));}
-    public static void open(ServerPlayer p,String id,InteractionHand hand){var m=ManualDefinition.find(id);if(m==null||m.sword())return;var active=CultivationFoundation.active(p);Cultivation.CHANNEL.send(PacketDistributor.PLAYER.with(()->p),new Open(id,hand,active!=null&&active.id().equals(id),Cultivation.initiated(p)&&CultivationFoundation.roots(p).containsAll(m.elements()),Cultivation.progress(p).level(),learned(p,id),ManualPractice.rank(p)));}
+    public static void open(ServerPlayer p,String id,InteractionHand hand){var m=ManualDefinition.find(id);if(m==null)return;var active=CultivationFoundation.active(p);Cultivation.CHANNEL.send(PacketDistributor.PLAYER.with(()->p),new Open(id,hand,active!=null&&active.id().equals(id),Cultivation.initiated(p)&&(m.sword()||CultivationFoundation.roots(p).containsAll(m.elements())),Cultivation.progress(p).level(),learned(p,id),ManualPractice.rank(p)));}
     public static boolean bookAction(ServerPlayer p,BookAction action){
-        var m=ManualDefinition.find(action.id);if(m==null||m.sword()||!p.isAlive()||p.isSpectator()||!p.getItemInHand(action.hand).is(FoundationItems.MANUALS.get(action.id).get()))return false;
+        var m=ManualDefinition.find(action.id);if(m==null||!p.isAlive()||p.isSpectator()||!p.getItemInHand(action.hand).is(FoundationItems.MANUALS.get(action.id).get()))return false;
         boolean accepted=false;
         if(action.action==0)accepted=CultivationFoundation.learn(p,action.id);
         else if(action.action==1||action.action==2){
             var active=CultivationFoundation.active(p);int page=action.action-1;
             if(active!=null&&active.id().equals(action.id)&&Cultivation.progress(p).level()>=(page==0?1:6)&&m.coverage()>=(page==0?1:6)){
-                var tag=CultivationFoundation.data(p);tag.putInt("SpellPages_"+action.id,learned(p,action.id)|(1<<page));tag.putInt("SelectedSpell",page);CultivationFoundation.save(p,tag);accepted=true;
+                var tag=CultivationFoundation.data(p);tag.putInt("SpellPages_"+m.family(),learned(p,action.id)|(1<<page));tag.putInt("SelectedSpell",page);if(m.sword())tag.putString("SwordArt",SwordPages.art(m,page));CultivationFoundation.save(p,tag);accepted=true;
             }
         }
         Cultivation.sync(p);open(p,action.id,action.hand);return accepted;
@@ -63,7 +64,7 @@ public final class SpellManuals {
     public static boolean cast(ServerPlayer p){
         var m=CultivationFoundation.active(p);if(m==null||m.sword()||!p.isAlive()||p.isSpectator())return false;
         var tag=CultivationFoundation.data(p);int page=tag.getInt("SelectedSpell")&1;int required=page==0?1:6;
-        if(Cultivation.progress(p).level()<required||(learned(p,m.id())&(1<<page))==0){p.displayClientMessage(Component.translatable("spell.xiuxian.need_page"),true);return false;}
+        if(m.coverage()<required||Cultivation.progress(p).level()<required||(learned(p,m.id())&(1<<page))==0){p.displayClientMessage(Component.translatable("spell.xiuxian.need_page"),true);return false;}
         long now=p.level().getGameTime();String element=element(m,page);String cooldown="SpellUntil_"+element+"_"+page;
         if(now<tag.getLong(cooldown)||now<tag.getLong("SpellGlobalUntil"))return false;
         LivingEntity target=SwordCombat.target(p);

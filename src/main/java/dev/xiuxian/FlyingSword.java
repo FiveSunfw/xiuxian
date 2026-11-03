@@ -23,7 +23,7 @@ public class FlyingSword extends ThrowableItemProjectile {
         if(level().isClientSide){super.tick();return;}
         if(!(getOwner() instanceof ServerPlayer owner)||!SwordCombat.swordReady(owner)||!owner.getMainHandItem().is(getItem().getItem())||!SwordCombat.isCurrent(owner,this)||tickCount>240||distanceToSqr(owner)>1600){discard();return;}
         if(art.equals("guard")){
-            if(tickCount>100){discard();return;}
+            if(tickCount>100*ManualPractice.power(owner)){discard();return;}
             if(tickCount%20==0&&!CultivationFoundation.spendMana(owner,4)){discard();return;}
             tickCount++;double angle=tickCount*.25;setPos(owner.getX()+Math.cos(angle)*1.2,owner.getY()+1,owner.getZ()+Math.sin(angle)*1.2);return;
         }

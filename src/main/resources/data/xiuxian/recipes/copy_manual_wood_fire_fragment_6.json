@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "xiuxian:wood_fire_fragment_6"
+    },
+    {
+      "item": "xiuxian:blank_manual"
+    },
+    {
+      "item": "minecraft:ink_sac"
+    }
+  ],
+  "result": {
+    "item": "xiuxian:wood_fire_fragment_6",
+    "count": 2
+  }
+}

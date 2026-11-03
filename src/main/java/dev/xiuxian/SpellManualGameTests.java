@@ -46,10 +46,13 @@ public class SpellManualGameTests {
             zombie.setHealth(20);zombie.invulnerableTime=0;zombie.clearFire();
             h.assertTrue(SpellManuals.cast(p),"First spell executes: "+manual.id());h.assertTrue(!SpellManuals.cast(p),"Spell cooldown blocks repeat");
             var persisted=p.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);persisted.putInt("xiuxian_level",6);p.getPersistentData().put(Player.PERSISTED_NBT_TAG,persisted);
-            h.assertTrue(SpellManuals.bookAction(p,new SpellManuals.BookAction(manual.id(),InteractionHand.MAIN_HAND,2)),"Second page available at layer six");
-            var tag=CultivationFoundation.data(p);tag.putLong("SpellGlobalUntil",0);CultivationFoundation.save(p,tag);
-            h.assertTrue(SpellManuals.cast(p),"Second spell executes: "+manual.id());
-            h.assertTrue(book.getCount()==1&&SpellManuals.learned(p,manual.id())==3,"Both pages learned without consuming book");
+            boolean second=SpellManuals.bookAction(p,new SpellManuals.BookAction(manual.id(),InteractionHand.MAIN_HAND,2));
+            h.assertTrue(second==(manual.coverage()>=6),"Missing fragment pages remain unavailable even at layer six");
+            if(second){
+                var tag=CultivationFoundation.data(p);tag.putLong("SpellGlobalUntil",0);CultivationFoundation.save(p,tag);
+                h.assertTrue(SpellManuals.cast(p),"Second spell executes: "+manual.id());
+            }
+            h.assertTrue(book.getCount()==1&&SpellManuals.learned(p,manual.id())==(second?3:1),"Available pages learned without consuming book");
         }h.succeed();
     }
     @GameTest(template="empty") public static void practiceIncreasesActualDamage(GameTestHelper h){

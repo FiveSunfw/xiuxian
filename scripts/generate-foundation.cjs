@@ -1,7 +1,6 @@
 module.exports=function({json,png,a,d}){
  const fs=require('fs');
- const source=fs.readFileSync('src/main/java/dev/xiuxian/ManualDefinition.java','utf8');
- const manuals=[...source.matchAll(/(?:sword|spell)\("([a-z_]+)", "([^"]+)"/g)].map(m=>({id:m[1],name:m[2]}));
+ const manuals=require('./manual-catalog.cjs')();
  for(const m of manuals){
   json(`${a}/models/item/${m.id}.json`,{parent:'minecraft:item/generated',textures:{layer0:`xiuxian:item/manuals/${m.id}`}});
   json(`${d}/recipes/copy_manual_${m.id}.json`,{type:'minecraft:crafting_shapeless',ingredients:[{item:`xiuxian:${m.id}`},{item:'xiuxian:blank_manual'},{item:'minecraft:ink_sac'}],result:{item:`xiuxian:${m.id}`,count:2}});

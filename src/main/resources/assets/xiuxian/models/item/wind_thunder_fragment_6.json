@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "xiuxian:item/manuals/wind_thunder_fragment_6"
+  }
+}

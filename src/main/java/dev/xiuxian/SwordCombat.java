@@ -27,6 +27,17 @@ public final class SwordCombat {
             .consumerMainThread((m,c)->{var p=c.get().getSender();if(p!=null){if(m.action.equals("cycle"))cycle(p);else if(m.action.equals("cast"))cast(p);else if(m.action.equals("recall"))recall(p,false);}c.get().setPacketHandled(true);}).add();
     }
     static List<String> known(ServerPlayer p){return CultivationFoundation.data(p).getList("SwordArts",8).stream().map(Tag::getAsString).filter(id->SwordArt.find(id)!=null).toList();}
+    static List<String> available(ServerPlayer p){
+        var result=new java.util.ArrayList<>(known(p));
+        var manual=CultivationFoundation.active(p);
+        if(manual!=null&&manual.sword()){
+            if(!result.contains("recall"))result.add("recall");
+            for(int page=0;page<2;page++)if((SpellManuals.learned(p,manual.id())&(1<<page))!=0&&Cultivation.progress(p).level()>=(page==0?1:6)&&manual.coverage()>=(page==0?1:6)){
+                String art=SwordPages.art(manual,page);if(!result.contains(art))result.add(art);
+            }
+        }
+        return result;
+    }
     static boolean learn(ServerPlayer p,String id){
         var tag=CultivationFoundation.data(p);var list=tag.getList("SwordArts",8);
         if(known(p).contains(id))return false;
@@ -35,7 +46,7 @@ public final class SwordCombat {
     public static boolean swordReady(ServerPlayer p){var m=CultivationFoundation.active(p);return p.isAlive()&&!p.isSpectator()&&m!=null&&m.sword()&&p.getMainHandItem().getItem() instanceof SwordItem;}
     static boolean isCurrent(ServerPlayer p,FlyingSword sword){var tag=CultivationFoundation.data(p);return tag.hasUUID("SwordProjection")&&tag.getUUID("SwordProjection").equals(sword.getUUID());}
     static FlyingSword current(ServerPlayer p){var tag=CultivationFoundation.data(p);if(!tag.hasUUID("SwordProjection"))return null;var e=p.serverLevel().getEntity(tag.getUUID("SwordProjection"));return e instanceof FlyingSword sword?sword:null;}
-    static String manual(ServerPlayer p){var m=CultivationFoundation.active(p);return m==null?"":m.id();}
+    static String manual(ServerPlayer p){var m=CultivationFoundation.active(p);return m==null?"":m.family();}
     static double flightSpeed(ServerPlayer p,String art){double speed=manual(p).equals("breeze_sword")?1.35:manual(p).equals("radiant_sword_fragment")?1.6:manual(p).equals("stone_sword")?.85:1.1;return art.equals("pierce")?speed*1.5:speed;}
     static boolean validTarget(ServerPlayer p,LivingEntity target){return target!=p&&target.isAlive()&&!target.isAlliedTo(p)&&!(target instanceof net.minecraft.world.entity.TamableAnimal pet&&pet.isOwnedBy(p))&&(!(target instanceof ServerPlayer other)||p.canHarmPlayer(other));}
     static LivingEntity target(ServerPlayer p){
@@ -49,14 +60,14 @@ public final class SwordCombat {
     }
     static void message(ServerPlayer p,String key){p.displayClientMessage(Component.translatable("message.xiuxian."+key),true);}
     static void cycle(ServerPlayer p){
-        var ids=known(p);if(ids.isEmpty()){message(p,"no_sword_art");return;}
+        var ids=available(p);if(ids.isEmpty()){message(p,"no_sword_art");return;}
         var tag=CultivationFoundation.data(p);int next=(ids.indexOf(tag.getString("SwordArt"))+1)%ids.size();tag.putString("SwordArt",ids.get(next));CultivationFoundation.save(p,tag);
         p.displayClientMessage(Component.translatable("message.xiuxian.art_selected",SwordArt.find(ids.get(next)).name()),true);
     }
     public static boolean cast(ServerPlayer p){
         if(!swordReady(p)){message(p,"need_sword_manual");return false;}
         var tag=CultivationFoundation.data(p);var art=SwordArt.find(tag.getString("SwordArt"));
-        if(art==null||!known(p).contains(art.id())){message(p,"no_sword_art");return false;}
+        if(art==null||!available(p).contains(art.id())){message(p,"no_sword_art");return false;}
         if(art.id().equals("recall"))return recall(p,false);
         if(art.id().equals("return_strike"))return recall(p,true);
         long now=p.level().getGameTime();
@@ -92,7 +103,7 @@ public final class SwordCombat {
     }
     static boolean recall(ServerPlayer p,boolean strike){
         var sword=current(p);if(!swordReady(p)||sword==null)return false;
-        String id=strike?"return_strike":"recall";if(!known(p).contains(id))return false;
+        String id=strike?"return_strike":"recall";if(!available(p).contains(id))return false;
         var tag=CultivationFoundation.data(p);long now=p.level().getGameTime();if(now<tag.getLong("SwordUntil_"+id))return false;
         double cost=(strike?12:1)*(manual(p).equals("returning_sword")?.6:1);
         if(!CultivationFoundation.spendMana(p,cost))return false;
@@ -109,7 +120,7 @@ public final class SwordCombat {
             var armor=victim.getAttribute(Attributes.ARMOR);
             if(armor!=null){armor.removeModifier(ARMOR_PENALTY);armor.addTransientModifier(new AttributeModifier(ARMOR_PENALTY,"xiuxian.sword_armor_break",art.equals("armor_break")?-4:-2,AttributeModifier.Operation.ADDITION));victim.getPersistentData().putLong("xiuxian_armor_until",p.level().getGameTime()+60);}
         }
-        float damage=(float)((p.getAttributeValue(Attributes.ATTACK_DAMAGE)+net.minecraft.world.item.enchantment.EnchantmentHelper.getDamageBonus(p.getMainHandItem(),victim.getMobType()))*multiplier*power);
+        float damage=(float)((p.getAttributeValue(Attributes.ATTACK_DAMAGE)+net.minecraft.world.item.enchantment.EnchantmentHelper.getDamageBonus(p.getMainHandItem(),victim.getMobType()))*multiplier*power*ManualPractice.power(p));
         if(victim.hurt(p.damageSources().playerAttack(p),damage)) p.setLastHurtMob(victim);
         p.serverLevel().sendParticles(ParticleTypes.CRIT,victim.getX(),victim.getY()+1,victim.getZ(),art.equals("shadows")?18:5,.3,.4,.3,.1);
     }

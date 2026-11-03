@@ -96,7 +96,7 @@ public class ClientSetup {
             var manual=state==null?null:ManualDefinition.find(state.active());
             Component manualName=manual==null?Component.translatable("manual.xiuxian.tier_"+ClientState.technique):Component.literal(manual.name());
             g.drawString(font,Component.translatable("screen.xiuxian.technique",manualName),18,174,0xffc3cec5);
-            if(manual!=null&&!manual.sword()&&SpellManuals.client!=null) {
+            if(manual!=null&&SpellManuals.client!=null) {
                 var practice=SpellManuals.client;
                 g.drawString(font,Component.translatable(practice.required()==0?"spell.xiuxian.rank_full":"spell.xiuxian.rank",practice.rank(),(int)practice.points(),practice.required()),18,190,0xffd6b982);
             }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "xiuxian:item/manuals/returning_sword_fragment_3"
+  }
+}

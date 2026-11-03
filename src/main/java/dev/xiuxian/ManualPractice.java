@@ -14,13 +14,13 @@ public final class ManualPractice {
     public static void reset(CompoundTag tag){tag.putInt("ManualRank",0);tag.putDouble("ManualPractice",0);}
     public static void train(ServerPlayer p,double gain){
         var manual=CultivationFoundation.active(p);
-        if(manual==null||manual.sword()||!Double.isFinite(gain)||gain<=0)return;
+        if(manual==null||!Double.isFinite(gain)||gain<=0)return;
         int rank=rank(p);double total=points(p)+gain;
         while(rank<MAX_RANK&&total>=Cultivation.MANUAL_PRACTICE_BASE.get()*(rank+1)){total-=Cultivation.MANUAL_PRACTICE_BASE.get()*(rank+1);rank++;}
         var tag=CultivationFoundation.data(p);tag.putInt("ManualRank",rank);tag.putDouble("ManualPractice",rank==MAX_RANK?0:total);CultivationFoundation.save(p,tag);
     }
     public static void promote(ServerPlayer p,int layers){
-        var manual=CultivationFoundation.active(p);if(manual==null||manual.sword()||layers<=0)return;
+        var manual=CultivationFoundation.active(p);if(manual==null||layers<=0)return;
         var tag=CultivationFoundation.data(p);int next=Math.min(MAX_RANK,rank(p)+layers);tag.putInt("ManualRank",next);if(next==MAX_RANK)tag.putDouble("ManualPractice",0);CultivationFoundation.save(p,tag);
     }
 }

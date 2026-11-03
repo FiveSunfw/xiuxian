@@ -27,3 +27,6 @@ forge*changelog.txt
 .tools/
 .gradle-cache/
 mdk.zip
+
+# Local CodeGraph index
+.codegraph/

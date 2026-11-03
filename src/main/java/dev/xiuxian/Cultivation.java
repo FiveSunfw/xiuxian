@@ -38,7 +38,7 @@ public class Cultivation {
     public static final ForgeConfigSpec.DoubleValue HERB_CHANCE, LIQUID_CHANCE, HEALTH_PER_LEVEL, DAMAGE_PER_LEVEL;
     public static final ForgeConfigSpec.IntValue PROGRESS_PER_SECOND, BASE_PROGRESS;
     public static final ForgeConfigSpec.BooleanValue GIVE_GUIDE_ON_FIRST_JOIN, AUTO_CULTIVATION;
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(Xiuxian.ID, "state"), () -> "8", "8"::equals, "8"::equals);
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(Xiuxian.ID, "state"), () -> "9", "9"::equals, "9"::equals);
     static {
         var builder = new ForgeConfigSpec.Builder();
         // Preserve the existing config key when replacing leaves with whole herbs.

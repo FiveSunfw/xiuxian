@@ -33,14 +33,7 @@ public final class FoundationItems {
         @Override public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
             ItemStack stack=player.getItemInHand(hand);
             if (player instanceof ServerPlayer server) {
-                if (!manual.sword()) { SpellManuals.open(server,manual.id(),hand); return InteractionResultHolder.sidedSuccess(stack,false); }
-                boolean known=CultivationFoundation.known(player).contains(manual.id());
-                if (!CultivationFoundation.learn(server,manual.id())) {
-                    player.displayClientMessage(Component.translatable(Cultivation.initiated(player)?"message.xiuxian.manual_root_mismatch":"message.xiuxian.need_initiation"),true);
-                    return InteractionResultHolder.fail(stack);
-                }
-                if (!known && !player.getAbilities().instabuild) stack.shrink(1);
-                player.displayClientMessage(Component.translatable("message.xiuxian.manual_active",manual.name()),false);
+                SpellManuals.open(server,manual.id(),hand);
             }
             return InteractionResultHolder.sidedSuccess(stack,level.isClientSide);
         }
