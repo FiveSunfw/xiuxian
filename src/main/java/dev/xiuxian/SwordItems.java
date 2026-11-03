@@ -23,10 +23,7 @@ public final class SwordItems {
         @Override public InteractionResultHolder<ItemStack> use(Level level,Player player,InteractionHand hand){
             var stack=player.getItemInHand(hand);
             if(player instanceof ServerPlayer server){
-                if(!Cultivation.initiated(player)){player.displayClientMessage(Component.translatable("message.xiuxian.need_initiation"),true);return InteractionResultHolder.fail(stack);}
-                boolean learned=SwordCombat.learn(server,art.id());
-                if(learned&&!player.getAbilities().instabuild)stack.shrink(1);
-                player.displayClientMessage(Component.translatable("message.xiuxian.art_learned",art.name()),false);
+                SwordBookNetwork.open(server,art.id(),hand);
             }
             return InteractionResultHolder.sidedSuccess(stack,level.isClientSide);
         }

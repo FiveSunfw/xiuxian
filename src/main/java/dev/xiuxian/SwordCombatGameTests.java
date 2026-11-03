@@ -81,4 +81,19 @@ public class SwordCombatGameTests {
         h.succeed();
     }
 
+    @GameTest(template="empty") public static void bookRequiresConfirmationAndIsRetained(GameTestHelper h){
+        var p=player(h);
+        var stack=new ItemStack(SwordItems.BOOKS.get("drive").get());p.setItemSlot(EquipmentSlot.MAINHAND,stack);
+        stack.use(h.getLevel(),p,net.minecraft.world.InteractionHand.MAIN_HAND);
+        h.assertTrue(!SwordCombat.known(p).contains("drive"),"Opening book must not learn automatically");
+        h.assertTrue(stack.getCount()==1,"Reading must keep the book");
+        h.assertTrue(!SwordBookNetwork.learn(p,"pierce",net.minecraft.world.InteractionHand.MAIN_HAND),"Wrong held book must not unlock another art");
+        h.assertTrue(SwordBookNetwork.learn(p,"drive",net.minecraft.world.InteractionHand.MAIN_HAND),"Confirmation learns the held book");
+        h.assertTrue(stack.getCount()==1&&SwordCombat.known(p).contains("drive"),"Learning keeps the actual book");
+        h.assertTrue(!SwordBookNetwork.learn(p,"drive",net.minecraft.world.InteractionHand.MAIN_HAND)&&stack.getCount()==1,"Duplicate confirmation is harmless");
+        var offhand=new ItemStack(SwordItems.BOOKS.get("recall").get());p.setItemSlot(EquipmentSlot.OFFHAND,offhand);
+        h.assertTrue(SwordBookNetwork.learn(p,"recall",net.minecraft.world.InteractionHand.OFF_HAND)&&offhand.getCount()==1,"Offhand books also remain");
+        h.succeed();
+    }
+
 }
