@@ -32,11 +32,13 @@ public class Cultivation {
     public static final java.util.List<ForgeConfigSpec.DoubleValue> VEIN_MULTIPLIERS;
     public static final ForgeConfigSpec.IntValue VEIN_REGEN_SECONDS;
     public static final ForgeConfigSpec.DoubleValue ALCHEMY_BASE, ALCHEMY_REALM, ALCHEMY_FURNACE, ALCHEMY_CAP;
+    public static final ForgeConfigSpec.IntValue MANUAL_PRACTICE_BASE;
+    public static final ForgeConfigSpec.DoubleValue MANUAL_POWER_PER_RANK;
     public static final ForgeConfigSpec CONFIG;
     public static final ForgeConfigSpec.DoubleValue HERB_CHANCE, LIQUID_CHANCE, HEALTH_PER_LEVEL, DAMAGE_PER_LEVEL;
     public static final ForgeConfigSpec.IntValue PROGRESS_PER_SECOND, BASE_PROGRESS;
     public static final ForgeConfigSpec.BooleanValue GIVE_GUIDE_ON_FIRST_JOIN, AUTO_CULTIVATION;
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(Xiuxian.ID, "state"), () -> "7", "7"::equals, "7"::equals);
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(Xiuxian.ID, "state"), () -> "8", "8"::equals, "8"::equals);
     static {
         var builder = new ForgeConfigSpec.Builder();
         // Preserve the existing config key when replacing leaves with whole herbs.
@@ -64,6 +66,8 @@ public class Cultivation {
         ALCHEMY_REALM=builder.defineInRange("alchemyRealmBonus",0.15,0,1);
         ALCHEMY_FURNACE=builder.defineInRange("alchemyFurnaceBonus",0.15,0,1);
         ALCHEMY_CAP=builder.defineInRange("alchemyChanceCap",0.95,0,1);
+        MANUAL_PRACTICE_BASE=builder.defineInRange("manualPracticeBase",300,1,1000000);
+        MANUAL_POWER_PER_RANK=builder.defineInRange("manualPowerPerRank",0.08,0,1);
         CONFIG = builder.build();
     }
     private static CompoundTag data(Player player) { return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG); }
@@ -86,7 +90,10 @@ public class Cultivation {
     public static int progressBase() { return Math.multiplyExact(BASE_PROGRESS.get(), DIFFICULTY.get()); }
     public static int technique(Player player) { return Math.max(0, Math.min(3, data(player).getInt(TECHNIQUE))); }
     public static double cultivationRate(Player player) {
-        if (!AUTO_CULTIVATION.get() || !player.isAlive() || player.isSpectator() || !initiated(player) || CultivationFoundation.blocked(player)) return 0;
+        return CultivationFoundation.blocked(player) ? 0 : breathingPotential(player);
+    }
+    public static double breathingPotential(Player player) {
+        if (!AUTO_CULTIVATION.get() || !player.isAlive() || player.isSpectator() || !initiated(player)) return 0;
         double multiplier = switch (technique(player)) {
             case 1 -> MANUAL_1_MULTIPLIER.get();
             case 2 -> MANUAL_2_MULTIPLIER.get();
@@ -120,6 +127,7 @@ public class Cultivation {
         float oldMaximum = player.getMaxHealth();
         applyAttributes(player);
         if (after.level() > before.level()) {
+            ManualPractice.promote(player, after.level()-before.level());
             healNewCapacity(player, oldMaximum);
             player.displayClientMessage(Component.translatable("message.xiuxian.level_up", after.level()), false);
         }
@@ -162,6 +170,7 @@ public class Cultivation {
         CultivationFoundation.registerNetwork();
         SwordCombat.network();
         SwordBookNetwork.register();
+        SpellManuals.network();
         CHANNEL.messageBuilder(State.class, 0, NetworkDirection.PLAY_TO_CLIENT)
             .encoder((msg, buf) -> { buf.writeVarInt(msg.level()); buf.writeVarInt(msg.points()); buf.writeVarInt(msg.required()); buf.writeDouble(msg.attackDamage()); buf.writeVarInt(msg.technique()); buf.writeDouble(msg.rate()); })
             .decoder(buf -> new State(buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readDouble(), buf.readVarInt(), buf.readDouble()))
@@ -169,6 +178,7 @@ public class Cultivation {
     }
     public static void sync(ServerPlayer player) {
         CultivationFoundation.sync(player);
+        SpellManuals.sync(player);
         CultivationProgress state = progress(player);
         CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new State(state.level(), state.points(), state.required(progressBase()), player.getAttributeValue(Attributes.ATTACK_DAMAGE), technique(player), cultivationRate(player)));
     }
@@ -177,6 +187,7 @@ public class Cultivation {
         if (!player.isAlive()) return;
         CultivationFoundation.ensure(player);
         CultivationFoundation.regenerate(player);
+        ManualPractice.train(player, breathingPotential(player));
         CompoundTag tag = data(player);
         double fraction = tag.getDouble(FRACTION);
         if (!Double.isFinite(fraction) || fraction < 0 || fraction >= 1) fraction = 0;

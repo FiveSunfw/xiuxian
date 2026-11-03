@@ -38,7 +38,7 @@ public class GuideBook {
         addPage(pages, "guide.xiuxian.brewing", FurnaceEntity.BREW_TICKS / 20);
         addPage(pages, "guide.xiuxian.cultivation",
             Math.round(Cultivation.HERB_CHANCE.get() * 100), Math.round(Cultivation.LIQUID_CHANCE.get() * 100));
-        for (int i=17;i<=24;i++) { addPage(pages, "guide.xiuxian.new_"+i+"_left"); addPage(pages, "guide.xiuxian.new_"+i+"_right"); }
+        for (int i=17;i<=26;i++) { addPage(pages, "guide.xiuxian.new_"+i+"_left"); addPage(pages, "guide.xiuxian.new_"+i+"_right"); }
         tag.put("pages", pages);
         book.setHoverName(Component.translatable("guide.xiuxian.title"));
         return book;

@@ -6,7 +6,7 @@ public final class ClientState {
     public static int level, points, required, technique;
     public static double rate;
     public static double attackDamage = 1;
-    public static void clear() { foundation = null; level = 0; points = 0; required = 0; attackDamage = 1; technique = 0; rate = 0; }
+    public static void clear() { foundation = null; SpellManuals.client = null; level = 0; points = 0; required = 0; attackDamage = 1; technique = 0; rate = 0; }
     private ClientState() {}
 }
 

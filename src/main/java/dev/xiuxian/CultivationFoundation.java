@@ -57,6 +57,7 @@ public final class CultivationFoundation {
         var manual = ManualDefinition.find(id);
         if (manual == null || !known(player).contains(id) || !Cultivation.initiated(player)) return false;
         CompoundTag tag = data(player);
+        if (!id.equals(tag.getString("Active"))) { ManualPractice.reset(tag); tag.putInt("SelectedSpell",0); }
         tag.putString("Active", id);
         save(player, tag);
         Cultivation.reconcileManual(player);

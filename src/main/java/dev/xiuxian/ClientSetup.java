@@ -32,6 +32,11 @@ public class ClientSetup {
             for (var herb : Xiuxian.HERBS.values()) ItemBlockRenderTypes.setRenderLayer(herb.get(), RenderType.cutout());
         });
     }
+    private static void sendCombat(boolean cycle) {
+        var state=ClientState.foundation;var m=state==null?null:ManualDefinition.find(state.active());
+        if(m!=null&&!m.sword()) Cultivation.CHANNEL.sendToServer(new SpellManuals.Cast(cycle));
+        else Cultivation.CHANNEL.sendToServer(new SwordCombat.Action(cycle?"cycle":"cast"));
+    }
     @Mod.EventBusSubscriber(modid = Xiuxian.ID, value = Dist.CLIENT)
     public static class Events {
         @SubscribeEvent public static void guide(net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickItem event) {
@@ -44,8 +49,8 @@ public class ClientSetup {
         @SubscribeEvent public static void tick(TickEvent.ClientTickEvent event) {
             if (event.phase == TickEvent.Phase.END) {
                 Minecraft mc = Minecraft.getInstance();
-                while (CAST.consumeClick()) if (mc.player != null && mc.screen == null) Cultivation.CHANNEL.sendToServer(new SwordCombat.Action("cast"));
-                while (CYCLE.consumeClick()) if (mc.player != null && mc.screen == null) Cultivation.CHANNEL.sendToServer(new SwordCombat.Action("cycle"));
+                while (CAST.consumeClick()) if (mc.player != null && mc.screen == null) sendCombat(false);
+                while (CYCLE.consumeClick()) if (mc.player != null && mc.screen == null) sendCombat(true);
                 while (RECALL.consumeClick()) if (mc.player != null && mc.screen == null) Cultivation.CHANNEL.sendToServer(new SwordCombat.Action("recall"));
                 while (STATUS.consumeClick()) if (mc.player != null && mc.screen == null) mc.setScreen(new StatusScreen());
             }
@@ -57,10 +62,10 @@ public class ClientSetup {
         private int panelLeft, panelTop;
         StatusScreen() { super(Component.translatable("screen.xiuxian.status")); }
         @Override protected void init() {
-            panelScale=Math.min(1f,Math.min((width-12f)/300,(height-12f)/255));
+            panelScale=Math.min(1f,Math.min((width-12f)/300,(height-12f)/273));
             panelLeft=(int)((width-300*panelScale)/2);
-            panelTop=(int)((height-255*panelScale)/2);
-            addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.translatable("screen.xiuxian.manuals"), b -> minecraft.setScreen(new ManualScreen())).bounds(panelLeft+(int)(18*panelScale),panelTop+(int)(228*panelScale),(int)(264*panelScale),(int)(20*panelScale)).build());
+            panelTop=(int)((height-273*panelScale)/2);
+            addRenderableWidget(net.minecraft.client.gui.components.Button.builder(Component.translatable("screen.xiuxian.manuals"), b -> minecraft.setScreen(new ManualScreen())).bounds(panelLeft+(int)(18*panelScale),panelTop+(int)(246*panelScale),(int)(264*panelScale),(int)(20*panelScale)).build());
             Cultivation.CHANNEL.sendToServer(new CultivationFoundation.Refresh());
         }
         @Override public boolean isPauseScreen() { return false; }
@@ -69,8 +74,8 @@ public class ClientSetup {
             g.pose().pushPose();
             g.pose().translate(panelLeft,panelTop,0);
             g.pose().scale(panelScale,panelScale,1);
-            g.fill(-1,-1,301,256,0xff709c82);
-            g.fill(0,0,300,255,0xff17251f);
+            g.fill(-1,-1,301,274,0xff709c82);
+            g.fill(0,0,300,273,0xff17251f);
             g.drawCenteredString(font,title,150,14,0xffd7f0bd);
             g.drawString(font,Component.translatable("screen.xiuxian.player",minecraft.player.getName()),18,35,0xffffff);
             g.drawString(font,Component.translatable(ClientState.level>0?"realm.xiuxian.qi_"+ClientState.level:"screen.xiuxian.mortal"),18,53,0xffd7f0bd);
@@ -91,10 +96,14 @@ public class ClientSetup {
             var manual=state==null?null:ManualDefinition.find(state.active());
             Component manualName=manual==null?Component.translatable("manual.xiuxian.tier_"+ClientState.technique):Component.literal(manual.name());
             g.drawString(font,Component.translatable("screen.xiuxian.technique",manualName),18,174,0xffc3cec5);
-            if(ClientState.level>0&&!full)g.drawString(font,Component.translatable(ClientState.rate>0?"screen.xiuxian.breathing":"screen.xiuxian.breathing_paused",String.format(java.util.Locale.ROOT,"%.2f",ClientState.rate)),18,190,0xff99ab9d);
+            if(manual!=null&&!manual.sword()&&SpellManuals.client!=null) {
+                var practice=SpellManuals.client;
+                g.drawString(font,Component.translatable(practice.required()==0?"spell.xiuxian.rank_full":"spell.xiuxian.rank",practice.rank(),(int)practice.points(),practice.required()),18,190,0xffd6b982);
+            }
+            if(ClientState.level>0&&!full)g.drawString(font,Component.translatable(ClientState.rate>0?"screen.xiuxian.breathing":"screen.xiuxian.breathing_paused",String.format(java.util.Locale.ROOT,"%.2f",ClientState.rate)),18,205,0xff99ab9d);
             var food=minecraft.player.getEffect(CultivationResources.NOURISHMENT.get());
-            if(food!=null)g.drawString(font,Component.translatable("screen.xiuxian.food_time",food.getDuration()/20),18,205,0xffc4d998);
-            if(state!=null&&state.blocked()&&!full)g.drawString(font,Component.translatable("screen.xiuxian.manual_gate"),18,219,0xffe2c38d);
+            if(food!=null)g.drawString(font,Component.translatable("screen.xiuxian.food_time",food.getDuration()/20),18,220,0xffc4d998);
+            if(state!=null&&state.blocked()&&!full)g.drawString(font,Component.translatable("screen.xiuxian.manual_gate"),18,234,0xffe2c38d);
             g.pose().popPose();
             super.render(g,mouseX,mouseY,partial);
         }
