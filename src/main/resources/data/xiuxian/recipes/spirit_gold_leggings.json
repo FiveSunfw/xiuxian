@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GGG",
+    "G G",
+    "G G"
+  ],
+  "key": {
+    "G": {
+      "item": "xiuxian:spirit_gold_ingot"
+    }
+  },
+  "result": {
+    "item": "xiuxian:spirit_gold_leggings"
+  }
+}

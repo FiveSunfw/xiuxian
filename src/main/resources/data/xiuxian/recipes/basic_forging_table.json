@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CSC",
+    "CTC",
+    " F "
+  ],
+  "key": {
+    "C": {
+      "item": "xiuxian:spirit_copper_ingot"
+    },
+    "S": {
+      "item": "xiuxian:spirit_stone"
+    },
+    "T": {
+      "item": "minecraft:smithing_table"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "xiuxian:basic_forging_table"
+  }
+}

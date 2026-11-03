@@ -175,3 +175,39 @@ JAR SHA256：AB8384872E54AA00123525558750E95C0251700D4744AD3EB633EBE8FEC20921。
 JAR SHA256：D73B4EB61C02AA2B5FD5D05DA2AD692D2DDE2ED6871AB80FC5C8C72D7CCCA36E。
 
 客户端安装完成，哈希核对一致，旧0.3.1已备份到E盘并移出mods。
+
+## 0.3.3 炼器物品注册阶段（2026-11-03）
+
+新增灵金锭、五种器胚、20件命名防具、11把命名剑和基础炼器台方块/物品注册及对应资源映射。37个物品模型和炼器台方块模型使用原版现有贴图作为临时占位。Java编译与JAR打包成功，未运行GameTest，也未启动客户端；创造页签内显示、方块外观及物品贴图待用户试玩。炼器台界面、配方、装备属性和注灵均未实现。
+
+JAR：build/releases/xiuxian-0.3.3.jar。SHA256：FEA6F53FCF9C21523BF5229EFB8008D2372B2C706D1D50C1353DD593A5AB4257。未替换用户客户端中的0.3.2包。
+
+
+## 0.3.4 炼器台模型与独立指南（2026-11-03）
+
+Java编译、jar/reobfJar成功。386个资源JSON均可解析；4张独立方块贴图均为16×16。检查JAR包含ForgingGuide、ForgingTableBlock类及全部4张贴图。放置方向、模型对应碰撞、合成掉落与五页独立指南已写入代码/资源，未进行GameTest或实机测试。首次登录赠书、旧玩家领取、书页排版和实机外观待用户试玩；注灵界面与装备效果仍未实现。
+
+JAR：build/releases/xiuxian-0.3.4.jar。SHA256：6B802AC5B923E5EB7A70885E9C681706741AC63C97A3DE579B93BAACAB34DC86。未替换客户端JAR。
+
+
+## 0.3.5 用户图标接入（2026-11-03）
+
+从用户提供的四张图中裁出44张独立图标，清理图内棋盘格，输出64×64 RGBA。检查每个模型指向同名模组贴图，44个PNG均存在透明通道且已进入JAR；Gradle jar/reobfJar成功。未运行GameTest和客户端。命名剑11张仍需对应图片。
+
+JAR：build/releases/xiuxian-0.3.5.jar。SHA256：A1CA8A21071D5ADC4DECE70F4CAC12BB3D4186DBE6514E270A498354A922304A。未替换客户端JAR。
+
+
+## 0.3.6 命名剑图标（2026-11-03）
+
+将用户透明4×3图集的前11格按约定顺序裁切并映射到11个现有命名剑ID。静态核对11张PNG为64×64 RGBA、物品模型指向同名贴图，JAR含全部资源和0.3.6元数据。Gradle jar/reobfJar成功。未运行GameTest或客户端试玩，实机清晰度待用户确认。
+
+JAR：build/releases/xiuxian-0.3.6.jar。SHA256：2655E51937C097624836684484C4365067EF9F81B32D4B8457E62BEC79D3A66D。未替换客户端JAR。
+
+
+## 0.3.7 手持与穿戴基础（2026-11-03）
+
+旧普通Item改为12个SwordItem（含灵金剑胚）和24个ArmorItem（含四件防具胚），物品ID不变。新增minecraft:swords、minecraft:trimmable_armor、xiuxian分组及forge灵金锭标签，并加入灵金锭和五种器胚配方。36项必需GameTest通过，新增验证剑类型/主手槽/标签以及防具部位/标签；jar/reobfJar构建成功，JAR元数据及标签/配方资源检查通过。客户端手持/穿戴视觉仍待用户试玩；命名装备的专属词条及自定义穿戴纹理尚未开发。
+
+JAR：build/releases/xiuxian-0.3.7.jar。SHA256：86ABCB5BDEFAB1BF213EA39D933E9E7B297110C5870DBCBA6BD2BC3D41CE2D45。
+
+客户端安装：旧0.3.2 JAR已备份至E盘，指定Forge 47.4.28客户端mods现只保留xiuxian-0.3.7.jar；安装文件SHA256与构建包一致。未启动用户客户端。

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "xiuxian:item/azure_fang_hunting_sword"
+  }
+}

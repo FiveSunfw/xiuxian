@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "xiuxian:item/rock_fang_armor_piercing_sword"
+  }
+}

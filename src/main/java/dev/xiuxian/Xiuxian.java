@@ -35,6 +35,11 @@ public class Xiuxian {
             for (var item : Alchemy.ITEMS.values()) output.accept(item.get());
             for (var egg : Beasts.EGGS.values()) output.accept(egg.get());
             for (var material : Beasts.MATERIALS.values()) output.accept(material.get());
+            output.accept(ForgingContent.BASIC_FORGING_TABLE_ITEM.get());
+            output.accept(ForgingContent.SPIRIT_GOLD_INGOT.get());
+            for (var item : ForgingContent.BLANKS.values()) output.accept(item.get());
+            for (var item : ForgingContent.ARMOR.values()) output.accept(item.get());
+            for (var item : ForgingContent.SWORDS.values()) output.accept(item.get());
         }).build());
     public static final Map<HerbKind, RegistryObject<Block>> HERBS = new EnumMap<>(HerbKind.class);
     public static final Map<HerbKind, RegistryObject<Item>> HERB_ITEMS = new EnumMap<>(HerbKind.class);
@@ -57,6 +62,7 @@ public class Xiuxian {
     public static final RegistryObject<MenuType<FurnaceMenu>> FURNACE_MENU = MENUS.register("herbal_furnace", () -> IForgeMenuType.create(FurnaceMenu::new));
     public Xiuxian() {
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
+        ForgingContent.register();
         CultivationResources.register(bus);
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Cultivation.CONFIG);

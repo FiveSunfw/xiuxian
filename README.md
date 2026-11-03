@@ -1,6 +1,12 @@
-# 修仙 0.3.2 · 炼气与一阶妖兽
+# 修仙 0.3.7 · 炼气与一阶妖兽
 
 Minecraft Java 1.20.1 / Forge，模组 ID `xiuxian`。开发基线 Forge 47.3.0，用户试玩环境为 Forge 47.4.28。
+
+## 炼器物品注册阶段
+
+0.3.3开始登记基础炼器内容：灵金锭、五种灵金器胚、20件命名防具、11把命名剑和基础炼器台。基础炼器台已有方块和工作台配方，尚无炼制界面。灵金剑胚与11把命名剑现为可手持攻击的剑，灵金四件防具胚与20件命名防具现为可穿戴护甲；妖兽词条和注灵仍待实现。55种炼器相关物品已有独立贴图：灵金锭、器胚、18种妖兽材料、20件防具和11把命名剑。装备的专属妖兽效果与注灵功能仍待实现。
+
+团队分支与提交说明见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 图文入门书
 
@@ -110,7 +116,7 @@ node scripts/generate-resources.cjs
 node scripts/validate-content.cjs
 ```
 
-Java 17 位于项目 `.tools/jdk-17...`，工具、缓存和产物均在 E 盘。成品为 `build/libs/xiuxian-0.3.2.jar`。JEI 15.74.0.233 仅作可选 API 编译引用，不随包分发。
+Java 17 位于项目 `.tools/jdk-17...`，工具、缓存和产物均在 E 盘。当前成品为 `build/releases/xiuxian-0.3.7.jar`。JEI 15.74.0.233 仅作可选 API 编译引用，不随包分发。
 
 用户自行进行客户端试玩，独立服和双人联机验收后续进行。实际检查记录见 `VALIDATION.md`。源码含炉子与玩家属性的 GameTest，具体执行结果见验证记录。原创部分暂保留所有权利，Forge MDK 许可见 `LICENSE.txt`。
 
@@ -326,3 +332,25 @@ Java 17 位于项目 `.tools/jdk-17...`，工具、缓存和产物均在 E 盘�
 新增配置lowRootSpeed、middleRootSpeed、highRootSpeed、yellowLowManualSpeed、yellowMiddleManualSpeed、yellowHighManualSpeed、mysticLowManualSpeed、flyingSwordWeaponScale、primarySpellDamage、secondarySpellDamage。配置按原存档自动补缺。
 
 生产兼修原则确定为剑修术修都可学习炼丹、炼器等生产专业。现有炼丹无主战路线门槛，已验证两条路线均可开炉；炼器本体及生产专业等级尚待开发，符箓的制作资格仍待用户决定。
+
+
+## 0.3.4 炼器台外观与指南
+
+炼器台采用独立铜框金属台面、炉膛和白色灵石模型及像素贴图，已可工作台合成、放置、挖掘掉落。新增独立《炼器指南》，现有玩家下次登录也会领取，沿用giveGuideOnFirstJoin配置；可用`/xiuxian forging_guide`补领。指南只讲操作和物品类别，不列具体配方。当前注灵界面及词条功能仍待实现。
+
+
+## 0.3.5 用户图标接入
+
+已把用户提供的四张图裁成44张64×64透明贴图，分别接入灵金锭、五种器胚、18种现有妖兽材料和20件命名防具。完整毒囊采用第四张图中的新版。原始图保存在art_sources/forging_0_3_5，裁切脚本为scripts/import_forging_icons.py。11把命名剑的单独图标仍使用临时映射。
+
+
+## 0.3.6 十一把飞剑图标
+
+用户提供的4×3透明图集按前十一格拆出11张64×64飞剑图标，依照既定顺序映射至11个命名剑ID。原图位于art_sources/forging_0_3_6/swords_sheet.png，裁切脚本为scripts/import_forging_swords.py。炼器相关55种物品的图标现均已接入，装备行为仍待开发。
+
+
+## 0.3.7 装备手持、穿戴与标签
+
+灵金剑胚和11把命名剑使用原版剑的物品类型，可手持近战，也满足现有飞剑功法的剑类型检查；手持与飞剑投影显示各自的图标。灵金防具胚和20件命名防具使用原版防具物品类型，可穿入头、胸、腿、脚槽，提供实际基础护甲、耐久和附魔功能。初始材质暂按铁、下品锁链、中品铁、上品钻石处理，穿在身上显示对应的原版护甲模型和纹理；专属外观与妖兽材料词条尚未制作。
+
+物品仍统一列在“修仙”创造页签。剑加入minecraft:swords与xiuxian:forging_swords；防具加入minecraft:trimmable_armor及xiuxian对应部位标签；灵金锭加入forge:ingots和forge:ingots/spirit_gold；妖兽材料、器胚各有模组标签。金锭＋灵石可合成灵金锭，五种器胚按原版金装形状合成。

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "xiuxian:item/frost_silk_binding_sword"
+  }
+}

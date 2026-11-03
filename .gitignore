@@ -30,3 +30,6 @@ mdk.zip
 
 # Local CodeGraph index
 .codegraph/
+
+# Python asset import helpers
+__pycache__/

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "xiuxian:item/viper_fang_poison_sword"
+  }
+}
