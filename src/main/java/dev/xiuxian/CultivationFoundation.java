@@ -88,7 +88,11 @@ public final class CultivationFoundation {
         double recovery = (combat ? .5 : 2) * (manual == null ? 1 : manual.speed());
         CompoundTag tag = data(player); tag.putDouble("Mana", Math.min(maxMana(player), mana(player) + recovery)); save(player, tag);
     }
-    public static void clone(Player original, Player replacement) { save(replacement, data(original).copy()); }
+    public static void clone(Player original, Player replacement) {
+        var tag=data(original).copy();
+        tag.remove("SwordProjection"); tag.remove("SwordPreparingUntil"); tag.remove("SwordChargedUntil");
+        save(replacement, tag);
+    }
     public record State(String roots, int grade, String active, String known, double mana, double maximum, boolean blocked) {}
     public record Select(String id) {}
     public static void registerNetwork() {

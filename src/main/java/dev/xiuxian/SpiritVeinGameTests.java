@@ -12,6 +12,17 @@ import java.util.UUID;
 @GameTestHolder(Xiuxian.ID)
 @PrefixGameTestTemplate(false)
 public class SpiritVeinGameTests {
+    // Hash-map traversal order is not part of persisted vein or timer semantics.
+    private static CompoundTag ordered(CompoundTag tag) {
+        var cores=tag.getList("cores",10).stream().map(t->(CompoundTag)t).sorted(java.util.Comparator.comparingLong(t->t.getLong("pos"))).toList();
+        net.minecraft.nbt.ListTag sortedCores=new net.minecraft.nbt.ListTag();
+        for(var core:cores){
+            net.minecraft.nbt.ListTag ores=new net.minecraft.nbt.ListTag();
+            core.getList("ores",10).stream().map(t->(CompoundTag)t).sorted(java.util.Comparator.comparingLong(t->t.getLong("pos"))).forEach(ores::add);
+            core.put("ores",ores);sortedCores.add(core);
+        }
+        tag.put("cores",sortedCores);return tag;
+    }
     @GameTest(template="empty", timeoutTicks=100)
     public static void auraAndPersistence(GameTestHelper h) {
         var level=h.getLevel(); var data=SpiritVeins.get(level);
@@ -44,7 +55,7 @@ public class SpiritVeinGameTests {
         h.assertTrue(level.getBlockState(ore).is(VeinBlocks.DEPLETED.get()),"Mining must leave depleted ore");
         core.ores.put(ore,Cultivation.VEIN_REGEN_SECONDS.get()-1);
         var restored=SpiritVeins.load(data.save(new CompoundTag()));
-        h.assertTrue(restored.save(new CompoundTag()).equals(data.save(new CompoundTag())),"Timer must survive NBT round trip");
+        h.assertTrue(ordered(restored.save(new CompoundTag())).equals(ordered(data.save(new CompoundTag()))),"Timer must survive NBT round trip");
         h.runAfterDelay(25,()->{
             h.assertTrue(level.getBlockState(ore).is(CultivationResources.ORE.get()),"Loaded ore must regenerate");
             level.removeBlock(pos,false);

@@ -36,7 +36,7 @@ public class Cultivation {
     public static final ForgeConfigSpec.DoubleValue HERB_CHANCE, LIQUID_CHANCE, HEALTH_PER_LEVEL, DAMAGE_PER_LEVEL;
     public static final ForgeConfigSpec.IntValue PROGRESS_PER_SECOND, BASE_PROGRESS;
     public static final ForgeConfigSpec.BooleanValue GIVE_GUIDE_ON_FIRST_JOIN, AUTO_CULTIVATION;
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(Xiuxian.ID, "state"), () -> "4", "4"::equals, "4"::equals);
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(Xiuxian.ID, "state"), () -> "5", "5"::equals, "5"::equals);
     static {
         var builder = new ForgeConfigSpec.Builder();
         // Preserve the existing config key when replacing leaves with whole herbs.
@@ -160,6 +160,7 @@ public class Cultivation {
     public record State(int level, int points, int required, double attackDamage, int technique, double rate) {}
     public static void registerNetwork() {
         CultivationFoundation.registerNetwork();
+        SwordCombat.network();
         CHANNEL.messageBuilder(State.class, 0, NetworkDirection.PLAY_TO_CLIENT)
             .encoder((msg, buf) -> { buf.writeVarInt(msg.level()); buf.writeVarInt(msg.points()); buf.writeVarInt(msg.required()); buf.writeDouble(msg.attackDamage()); buf.writeVarInt(msg.technique()); buf.writeDouble(msg.rate()); })
             .decoder(buf -> new State(buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readDouble(), buf.readVarInt(), buf.readDouble()))

@@ -34,6 +34,14 @@ public class GuideScreen extends Screen {
             case 14 -> "food_title";
             case 15 -> "pill_title";
             case 16 -> "stone_title";
+            case 17 -> "journey_title";
+            case 18 -> "roots_title";
+            case 19 -> "energy_title";
+            case 20 -> "manual_title";
+            case 21 -> "sword_start_title";
+            case 22 -> "sword_attack_title";
+            case 23 -> "sword_defense_title";
+            case 24 -> "sword_styles_title";
             default -> "contents";
         });
     }
@@ -82,6 +90,11 @@ public class GuideScreen extends Screen {
             heading(g, label("atlas"), 229, 27);
             paragraph(g, label("overview"), 229, 50, 159);
             for (int i = 0; i < 8; i++) icon(g, herb(herbs[i]), 234 + i % 4 * 40, 158 + i / 4 * 40, 28);
+        } else if (page >= 17) {
+            heading(g, chapter(page), 29, 27);
+            paragraph(g, label("new_"+page+"_left"), 29, 50, 159);
+            heading(g, label("details"), 229, 27);
+            paragraph(g, label("new_"+page+"_right"), 229, 50, 159);
         } else if (page <= 8) {
             HerbKind kind = herbs[page - 1];
             heading(g, name(kind), 29, 27);
@@ -124,7 +137,7 @@ public class GuideScreen extends Screen {
             heading(g, page == 9 ? label("atlas") : chapter(page), 229, 27);
             if (page >= 13) {
                 net.minecraft.world.level.ItemLike[] items = switch (page) {
-                    case 13 -> new net.minecraft.world.level.ItemLike[]{CultivationResources.MANUAL_1.get(), CultivationResources.MANUAL_2.get(), CultivationResources.MANUAL_3.get()};
+                    case 13 -> new net.minecraft.world.level.ItemLike[]{FoundationItems.BLANK.get(), FoundationItems.TESTER.get(), FoundationItems.MANUALS.get("basic_sword").get()};
                     case 14 -> new net.minecraft.world.level.ItemLike[]{Items.WHEAT, Items.APPLE, CultivationResources.MEAL.get()};
                     case 15 -> new net.minecraft.world.level.ItemLike[]{Alchemy.FURNACE_ITEM.get(), Alchemy.item("qi_gathering_formula"), CultivationResources.PILL.get(), Alchemy.item("pill_residue")};
                     default -> new net.minecraft.world.level.ItemLike[]{CultivationResources.ORE_ITEM.get(), VeinBlocks.CORE_ITEM.get(), VeinBlocks.DEPLETED_ITEM.get()};
@@ -135,6 +148,7 @@ public class GuideScreen extends Screen {
                     int x = 241 + col * 42, y = 58 + row * 42;
                     g.fill(x-1, y-1, x+35, y+35, 0x30694b2a);
                     if (col != 1) icon(g, new ItemStack(Blocks.COBBLESTONE), x, y, 34);
+                    else if (row == 0) icon(g, new ItemStack(CultivationResources.STONE.get()), x, y, 34);
                     else if (row == 2) icon(g, new ItemStack(Blocks.CAMPFIRE), x, y, 34);
                 }
                 g.drawString(font, "↓", 303, 191, 0xff694827, false);
@@ -151,6 +165,7 @@ public class GuideScreen extends Screen {
                 for (int i = 0; i < herbs.length; i++) icon(g, page == 12 ? elixir(herbs[i]) : herb(herbs[i]), 239 + i % 4 * 39, 85 + i / 4 * 61, 30);
             }
         }
+        g.drawString(font, label("cultivation_tab"), 85, 251, 0xfff2ddb5, false);
         g.drawString(font, "‹", 27, 251, 0xfff2ddb5, false);
         g.drawCenteredString(font, label("index"), 210, 251, 0xfff2ddb5);
         g.drawString(font, label("resource_tab"), 275, 251, 0xfff2ddb5, false);
@@ -165,8 +180,9 @@ public class GuideScreen extends Screen {
         if (x >= 387 && x <= 410 && y >= 0 && y <= 20) { onClose(); return true; }
         if (y >= 247 && y <= 267) {
             if (x < 70) page = Math.max(0, page - 1);
+            else if (x >= 70 && x <= 160) page = 17;
             else if (x >= 270 && x <= 375) page = 13;
-            else if (x > 375) page = Math.min(16, page + 1);
+            else if (x > 375) page = Math.min(24, page + 1);
             else page = 0;
             return true;
         }

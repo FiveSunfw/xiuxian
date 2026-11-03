@@ -20,7 +20,11 @@ import org.lwjgl.glfw.GLFW;
 @Mod.EventBusSubscriber(modid = Xiuxian.ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
     static final KeyMapping STATUS = new KeyMapping("key.xiuxian.status", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_K, "key.categories.xiuxian");
-    @SubscribeEvent public static void keys(RegisterKeyMappingsEvent event) { event.register(STATUS); }
+    static final KeyMapping CAST = new KeyMapping("key.xiuxian.sword_cast", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.categories.xiuxian");
+    static final KeyMapping CYCLE = new KeyMapping("key.xiuxian.sword_cycle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, "key.categories.xiuxian");
+    static final KeyMapping RECALL = new KeyMapping("key.xiuxian.sword_recall", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, "key.categories.xiuxian");
+    @SubscribeEvent public static void keys(RegisterKeyMappingsEvent event) { event.register(STATUS); event.register(CAST); event.register(CYCLE); event.register(RECALL); }
+    @SubscribeEvent public static void renderers(net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers event) { event.registerEntityRenderer(SwordItems.FLYING.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new); }
     @SubscribeEvent public static void setup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             MenuScreens.register(Xiuxian.FURNACE_MENU.get(), FurnaceScreen::new);
@@ -40,6 +44,9 @@ public class ClientSetup {
         @SubscribeEvent public static void tick(TickEvent.ClientTickEvent event) {
             if (event.phase == TickEvent.Phase.END) {
                 Minecraft mc = Minecraft.getInstance();
+                while (CAST.consumeClick()) if (mc.player != null && mc.screen == null) Cultivation.CHANNEL.sendToServer(new SwordCombat.Action("cast"));
+                while (CYCLE.consumeClick()) if (mc.player != null && mc.screen == null) Cultivation.CHANNEL.sendToServer(new SwordCombat.Action("cycle"));
+                while (RECALL.consumeClick()) if (mc.player != null && mc.screen == null) Cultivation.CHANNEL.sendToServer(new SwordCombat.Action("recall"));
                 while (STATUS.consumeClick()) if (mc.player != null && mc.screen == null) mc.setScreen(new StatusScreen());
             }
         }
