@@ -163,3 +163,15 @@ JAR SHA256：DC9FBD364D0ADBFB0B164468624D0FAE073DD356A47B8CDB1FE37DD2E7AC69EF。
 JAR SHA256：AB8384872E54AA00123525558750E95C0251700D4744AD3EB633EBE8FEC20921。
 
 客户端已更新，安装JAR与构建文件哈希一致，0.3.0已备份到E盘并移出mods。ZIP包括新版JAR、安装说明和许可文件。
+
+## 0.3.2 修炼与战斗平衡（2026-11-03）
+
+35项必需GameTest通过，344个JSON资源检查通过；最终文案更新后构建成功。新增测试验证同根数灵根高低品级差3倍、功法实际倍率差距大于2.5倍、已应用装备攻击修饰符时飞剑只折算武器部分、两个主修路线均可炼丹、术法具有增强后的基础与境界成长。
+
+旧功法speed字段保留为品质识别标记，宝箱品质权重不变；实际修炼和回灵改用新的配置倍率。灵根本身不重新随机，原角色可直接使用新数值。独立生产兼修写入设计，当前炼丹通用，炼器未开发，符箓资格保留待定。
+
+新增配置默认lowRootSpeed=0.6、middleRootSpeed=1、highRootSpeed=1.8，功法品质倍率1.25/1.75/2.5/3.5，flyingSwordWeaponScale=0.4，primarySpellDamage=8，secondarySpellDamage=12。数值属于试玩选择，尚未实际验收对战平衡。
+
+JAR SHA256：D73B4EB61C02AA2B5FD5D05DA2AD692D2DDE2ED6871AB80FC5C8C72D7CCCA36E。
+
+客户端安装完成，哈希核对一致，旧0.3.1已备份到E盘并移出mods。

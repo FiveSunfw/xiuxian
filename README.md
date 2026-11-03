@@ -1,4 +1,4 @@
-# 修仙 0.3.1 · 炼气与一阶妖兽
+# 修仙 0.3.2 · 炼气与一阶妖兽
 
 Minecraft Java 1.20.1 / Forge，模组 ID `xiuxian`。开发基线 Forge 47.3.0，用户试玩环境为 Forge 47.4.28。
 
@@ -110,7 +110,7 @@ node scripts/generate-resources.cjs
 node scripts/validate-content.cjs
 ```
 
-Java 17 位于项目 `.tools/jdk-17...`，工具、缓存和产物均在 E 盘。成品为 `build/libs/xiuxian-0.3.1.jar`。JEI 15.74.0.233 仅作可选 API 编译引用，不随包分发。
+Java 17 位于项目 `.tools/jdk-17...`，工具、缓存和产物均在 E 盘。成品为 `build/libs/xiuxian-0.3.2.jar`。JEI 15.74.0.233 仅作可选 API 编译引用，不随包分发。
 
 用户自行进行客户端试玩，独立服和双人联机验收后续进行。实际检查记录见 `VALIDATION.md`。源码含炉子与玩家属性的 GameTest，具体执行结果见验证记录。原创部分暂保留所有权利，Forge MDK 许可见 `LICENSE.txt`。
 
@@ -312,3 +312,17 @@ Java 17 位于项目 `.tools/jdk-17...`，工具、缓存和产物均在 E 盘�
 | 深层枯竭灵石矿 | xiuxian:depleted_deepslate_spirit_ore |
 
 自然灵脉的核心与矿石再生关联其生成记录。通过命令领取并放置的核心可以展示方块，但不会凭空生成一条灵脉。
+
+## 0.3.2 修炼、飞剑与术法平衡
+
+当前试玩默认品级系数由0.8/1/1.2调整为0.6/1/1.8，同根数上品相对下品为3倍。根数系数仍为单1、双1.2、三0.85、四0.7、五0.55。药丹直接增加修为的数值不乘资质，低资质仍能通过资源供给推进。
+
+功法品质的实际修炼/回灵倍率改为黄下1.25、黄中1.75、黄上2.5、玄下3.5。旧catalogue中的速度字段作为品质标识保留，真正结算读取配置，因此宝箱品质权重不随速度提升而误变。
+
+飞剑基础伤害改为角色当前攻击属性扣除已生效主手剑的加法贡献，再加剑自身伤害与伤害附魔的40%，最后应用剑诀、剑经风格、蓄势和功法等级倍率。仅飞剑结算使用折算，普通挥剑不改。
+
+术法一层页默认基础8＋当前层数×0.6，六层攻击页默认基础12＋当前层数×0.9，再乘功法等级倍率和品质倍率（黄下1、黄中1.1、黄上1.2、玄下1.3）。范围目标数、耗灵、冷却及防护型效果按已有规则。
+
+新增配置lowRootSpeed、middleRootSpeed、highRootSpeed、yellowLowManualSpeed、yellowMiddleManualSpeed、yellowHighManualSpeed、mysticLowManualSpeed、flyingSwordWeaponScale、primarySpellDamage、secondarySpellDamage。配置按原存档自动补缺。
+
+生产兼修原则确定为剑修术修都可学习炼丹、炼器等生产专业。现有炼丹无主战路线门槛，已验证两条路线均可开炉；炼器本体及生产专业等级尚待开发，符箓的制作资格仍待用户决定。

@@ -74,9 +74,15 @@ public final class SpellManuals {
         tag=CultivationFoundation.data(p);tag.putLong(cooldown,now+(page==0?25:100));tag.putLong("SpellGlobalUntil",now+10);CultivationFoundation.save(p,tag);
         double power=ManualPractice.power(p);
         if(defense){p.addEffect(new MobEffectInstance(element.equals("土")?MobEffects.DAMAGE_RESISTANCE:MobEffects.ABSORPTION,(int)(100*power),element.equals("土")?0:1));}
-        else if(page==0)hit(p,target,element,(float)(4*power));
-        else{int count=0;for(var e:p.level().getEntitiesOfClass(LivingEntity.class,target.getBoundingBox().inflate(4),e->SwordCombat.validTarget(p,e)&&p.hasLineOfSight(e)&&p.distanceToSqr(e)<=900)){if(count++==5)break;hit(p,e,element,(float)(6*power));}}
+        else if(page==0)hit(p,target,element,damage(p,0));
+        else{int count=0;for(var e:p.level().getEntitiesOfClass(LivingEntity.class,target.getBoundingBox().inflate(4),e->SwordCombat.validTarget(p,e)&&p.hasLineOfSight(e)&&p.distanceToSqr(e)<=900)){if(count++==5)break;hit(p,e,element,damage(p,1));}}
         p.displayClientMessage(Component.translatable("spell.xiuxian.cast",name(m,page)),true);sync(p);return true;
+    }
+    static float damage(ServerPlayer player,int page){
+        var manual=CultivationFoundation.active(player);
+        double quality=manual==null?1:1+manual.qualityTier()*.1;
+        double base=(page==0?Cultivation.SPELL_PRIMARY_DAMAGE.get():Cultivation.SPELL_SECONDARY_DAMAGE.get())+Cultivation.progress(player).level()*(page==0?.6:.9);
+        return (float)(base*ManualPractice.power(player)*quality);
     }
     static void hit(ServerPlayer p,LivingEntity target,String element,float damage){
         if(!SwordCombat.validTarget(p,target)||!p.hasLineOfSight(target))return;

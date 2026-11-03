@@ -43,7 +43,7 @@ public final class CultivationFoundation {
         int count = roots(player).size();
         if (count == 0) return 1; // Legacy fake players and data before first login.
         double number = switch(count) { case 1 -> 1; case 2 -> 1.2; case 3 -> .85; case 4 -> .7; default -> .55; };
-        return number * switch(data(player).getInt("Grade")) { case 0 -> .8; case 2 -> 1.2; default -> 1; };
+        return number * Cultivation.ROOT_GRADE_SPEEDS.get(Math.max(0,Math.min(2,data(player).getInt("Grade")))).get();
     }
     public static int coverage(Player player) {
         var manual = active(player);
@@ -87,7 +87,7 @@ public final class CultivationFoundation {
         if (!Cultivation.initiated(player) || player.isSpectator() || !player.isAlive()) return;
         boolean combat = player.tickCount - Math.max(player.getLastHurtByMobTimestamp(), player.getLastHurtMobTimestamp()) < 200;
         var manual = active(player);
-        double recovery = (combat ? .5 : 2) * (manual == null ? 1 : manual.speed());
+        double recovery = (combat ? .5 : 2) * (manual == null ? 1 : manual.cultivationMultiplier());
         CompoundTag tag = data(player); tag.putDouble("Mana", Math.min(maxMana(player), mana(player) + recovery)); save(player, tag);
     }
     public static void clone(Player original, Player replacement) {

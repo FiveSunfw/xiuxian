@@ -34,6 +34,8 @@ public record ManualDefinition(String id, String name, boolean sword, List<Strin
         }
         return List.copyOf(result);
     }
+    public int qualityTier(){return speed<=1.25?0:speed<1.5?1:speed<1.75?2:3;}
+    public double cultivationMultiplier(){return Cultivation.MANUAL_QUALITY_SPEEDS.get(qualityTier()).get();}
     public String family(){return id.replaceFirst("_(fragment_[36]|complete)$","");}
     private static ManualDefinition sword(String id, String name, int coverage, double speed) {
         return new ManualDefinition(id, name, true, List.of(), coverage, speed);

@@ -110,6 +110,15 @@ public final class SwordCombat {
         sword.art=strike?"return_strike":"recall";sword.returning=true;sword.returnDamage=strike;
         tag=CultivationFoundation.data(p);tag.putLong("SwordUntil_"+id,now+(strike?60:10));CultivationFoundation.save(p,tag);return true;
     }
+    static double attackBase(ServerPlayer player,LivingEntity target){
+        var attribute=player.getAttribute(Attributes.ATTACK_DAMAGE);
+        double equipped=0;
+        for(var modifier:player.getMainHandItem().getAttributeModifiers(EquipmentSlot.MAINHAND).get(Attributes.ATTACK_DAMAGE))
+            if(modifier.getOperation()==AttributeModifier.Operation.ADDITION&&attribute.getModifier(modifier.getId())!=null)equipped+=modifier.getAmount();
+        double weapon=player.getMainHandItem().getItem() instanceof SwordItem sword?sword.getDamage():0;
+        double enchantment=net.minecraft.world.item.enchantment.EnchantmentHelper.getDamageBonus(player.getMainHandItem(),target.getMobType());
+        return Math.max(0,attribute.getValue()-equipped)+(weapon+enchantment)*Cultivation.SWORD_WEAPON_SCALE.get();
+    }
     static void strike(ServerPlayer p,LivingEntity victim,String art,double power){
         if(!validTarget(p,victim)||!p.hasLineOfSight(victim)||p.distanceToSqr(victim)>900)return;
         double multiplier=switch(art){case "pierce"->1.4;case "combo"->.65;case "sweep"->.8;case "shadows"->.45;case "return_strike"->1.1;default->1;};
@@ -120,7 +129,7 @@ public final class SwordCombat {
             var armor=victim.getAttribute(Attributes.ARMOR);
             if(armor!=null){armor.removeModifier(ARMOR_PENALTY);armor.addTransientModifier(new AttributeModifier(ARMOR_PENALTY,"xiuxian.sword_armor_break",art.equals("armor_break")?-4:-2,AttributeModifier.Operation.ADDITION));victim.getPersistentData().putLong("xiuxian_armor_until",p.level().getGameTime()+60);}
         }
-        float damage=(float)((p.getAttributeValue(Attributes.ATTACK_DAMAGE)+net.minecraft.world.item.enchantment.EnchantmentHelper.getDamageBonus(p.getMainHandItem(),victim.getMobType()))*multiplier*power*ManualPractice.power(p));
+        float damage=(float)(attackBase(p,victim)*multiplier*power*ManualPractice.power(p));
         if(victim.hurt(p.damageSources().playerAttack(p),damage)) p.setLastHurtMob(victim);
         p.serverLevel().sendParticles(ParticleTypes.CRIT,victim.getX(),victim.getY()+1,victim.getZ(),art.equals("shadows")?18:5,.3,.4,.3,.1);
     }

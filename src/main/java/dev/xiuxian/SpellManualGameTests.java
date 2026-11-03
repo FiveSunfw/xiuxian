@@ -35,9 +35,9 @@ public class SpellManualGameTests {
         ManualPractice.train(p,1e9);h.assertTrue(ManualPractice.rank(p)==9&&ManualPractice.points(p)==0,"Practice caps without overflow");h.succeed();
     }
     @GameTest(template="empty") public static void booksUnlockTwoPagesAndAllManualsCast(GameTestHelper h){
-        var zombie=h.spawn(EntityType.ZOMBIE,new BlockPos(1,1,2));zombie.setNoAi(true);zombie.setNoGravity(true);
         for(var manual:ManualDefinition.ALL){
             if(manual.sword())continue;
+            var zombie=h.spawn(EntityType.ZOMBIE,new BlockPos(1,1,2));zombie.setNoAi(true);zombie.setNoGravity(true);
             var p=player(h,manual.elements().toArray(String[]::new));var book=new ItemStack(FoundationItems.MANUALS.get(manual.id()).get());p.setItemSlot(EquipmentSlot.MAINHAND,book);
             book.use(h.getLevel(),p,InteractionHand.MAIN_HAND);h.assertTrue(CultivationFoundation.active(p)==null,"Reading does not auto-activate");
             h.assertTrue(SpellManuals.bookAction(p,new SpellManuals.BookAction(manual.id(),InteractionHand.MAIN_HAND,0)),"Activate compatible manual");
@@ -53,6 +53,7 @@ public class SpellManualGameTests {
                 h.assertTrue(SpellManuals.cast(p),"Second spell executes: "+manual.id());
             }
             h.assertTrue(book.getCount()==1&&SpellManuals.learned(p,manual.id())==(second?3:1),"Available pages learned without consuming book");
+            zombie.discard();
         }h.succeed();
     }
     @GameTest(template="empty") public static void practiceIncreasesActualDamage(GameTestHelper h){

@@ -34,6 +34,8 @@ public class Cultivation {
     public static final ForgeConfigSpec.DoubleValue ALCHEMY_BASE, ALCHEMY_REALM, ALCHEMY_FURNACE, ALCHEMY_CAP;
     public static final ForgeConfigSpec.IntValue MANUAL_PRACTICE_BASE;
     public static final ForgeConfigSpec.DoubleValue MANUAL_POWER_PER_RANK;
+    public static final java.util.List<ForgeConfigSpec.DoubleValue> ROOT_GRADE_SPEEDS, MANUAL_QUALITY_SPEEDS;
+    public static final ForgeConfigSpec.DoubleValue SWORD_WEAPON_SCALE, SPELL_PRIMARY_DAMAGE, SPELL_SECONDARY_DAMAGE;
     public static final ForgeConfigSpec CONFIG;
     public static final ForgeConfigSpec.DoubleValue HERB_CHANCE, LIQUID_CHANCE, HEALTH_PER_LEVEL, DAMAGE_PER_LEVEL;
     public static final ForgeConfigSpec.IntValue PROGRESS_PER_SECOND, BASE_PROGRESS;
@@ -68,6 +70,11 @@ public class Cultivation {
         ALCHEMY_CAP=builder.defineInRange("alchemyChanceCap",0.95,0,1);
         MANUAL_PRACTICE_BASE=builder.defineInRange("manualPracticeBase",300,1,1000000);
         MANUAL_POWER_PER_RANK=builder.defineInRange("manualPowerPerRank",0.08,0,1);
+        ROOT_GRADE_SPEEDS=java.util.List.of(builder.defineInRange("lowRootSpeed",0.6,0.1,10),builder.defineInRange("middleRootSpeed",1.0,0.1,10),builder.defineInRange("highRootSpeed",1.8,0.1,10));
+        MANUAL_QUALITY_SPEEDS=java.util.List.of(builder.defineInRange("yellowLowManualSpeed",1.25,1,20),builder.defineInRange("yellowMiddleManualSpeed",1.75,1,20),builder.defineInRange("yellowHighManualSpeed",2.5,1,20),builder.defineInRange("mysticLowManualSpeed",3.5,1,20));
+        SWORD_WEAPON_SCALE=builder.defineInRange("flyingSwordWeaponScale",0.4,0,1);
+        SPELL_PRIMARY_DAMAGE=builder.defineInRange("primarySpellDamage",8.0,0,100);
+        SPELL_SECONDARY_DAMAGE=builder.defineInRange("secondarySpellDamage",12.0,0,100);
         CONFIG = builder.build();
     }
     private static CompoundTag data(Player player) { return player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG); }
@@ -101,7 +108,7 @@ public class Cultivation {
             default -> 1.0;
         };
         var manual = CultivationFoundation.active(player);
-        if (manual != null) multiplier = manual.speed();
+        if (manual != null) multiplier = manual.cultivationMultiplier();
         multiplier *= CultivationFoundation.aptitude(player);
         if (player.hasEffect(CultivationResources.NOURISHMENT.get())) multiplier *= FOOD_MULTIPLIER.get();
         if (player.level() instanceof net.minecraft.server.level.ServerLevel server) multiplier *= SpiritVeins.get(server).multiplier(player);
