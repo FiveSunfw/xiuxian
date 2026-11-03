@@ -24,7 +24,7 @@ public class ClientSetup {
     static final KeyMapping CYCLE = new KeyMapping("key.xiuxian.sword_cycle", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, "key.categories.xiuxian");
     static final KeyMapping RECALL = new KeyMapping("key.xiuxian.sword_recall", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, "key.categories.xiuxian");
     @SubscribeEvent public static void keys(RegisterKeyMappingsEvent event) { event.register(STATUS); event.register(CAST); event.register(CYCLE); event.register(RECALL); }
-    @SubscribeEvent public static void renderers(net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers event) { event.registerEntityRenderer(SwordItems.FLYING.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new); }
+    @SubscribeEvent public static void renderers(net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers event) { for(var kind:BeastKind.values()) event.registerEntityRenderer(Beasts.TYPES.get(kind).get(),context->new BeastRenderer(context,kind)); event.registerEntityRenderer(Beasts.SILK.get(),net.minecraft.client.renderer.entity.ThrownItemRenderer::new); event.registerEntityRenderer(SwordItems.FLYING.get(), net.minecraft.client.renderer.entity.ThrownItemRenderer::new); }
     @SubscribeEvent public static void setup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             MenuScreens.register(Xiuxian.FURNACE_MENU.get(), FurnaceScreen::new);

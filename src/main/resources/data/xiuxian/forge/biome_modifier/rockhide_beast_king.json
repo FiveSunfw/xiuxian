@@ -1,0 +1,15 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "minecraft:windswept_hills",
+    "minecraft:stony_peaks",
+    "minecraft:dripstone_caves",
+    "minecraft:lush_caves"
+  ],
+  "spawners": {
+    "type": "xiuxian:rockhide_beast_king",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "minecraft:stony_peaks",
+    "minecraft:windswept_gravelly_hills",
+    "minecraft:badlands",
+    "minecraft:wooded_badlands"
+  ],
+  "spawners": {
+    "type": "xiuxian:thundercrest_lizard",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

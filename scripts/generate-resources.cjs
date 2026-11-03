@@ -112,3 +112,4 @@ require('./generate-sword-combat.cjs')({json,png,a,d});
 require('./generate-sword-book-screen.cjs')({json,a});
 require('./generate-spell-manuals.cjs')({json,a});
 require('./generate-release020.cjs')({json,a});
+require('./generate-beasts.cjs')({json,png,a,d});

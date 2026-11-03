@@ -43,6 +43,7 @@ public class GuideScreen extends Screen {
             case 23 -> "sword_defense_title";
             case 24 -> "sword_styles_title";
             case 25, 26 -> "spell_title";
+            case 27, 28, 29 -> "beast_title";
             default -> "contents";
         });
     }
@@ -166,6 +167,7 @@ public class GuideScreen extends Screen {
                 for (int i = 0; i < herbs.length; i++) icon(g, page == 12 ? elixir(herbs[i]) : herb(herbs[i]), 239 + i % 4 * 39, 85 + i / 4 * 61, 30);
             }
         }
+        g.drawString(font, label("beast_tab"), 140, 251, 0xfff2ddb5, false);
         g.drawString(font, label("spell_tab"), 325, 251, 0xfff2ddb5, false);
         g.drawString(font, label("cultivation_tab"), 85, 251, 0xfff2ddb5, false);
         g.drawString(font, "‹", 27, 251, 0xfff2ddb5, false);
@@ -182,10 +184,11 @@ public class GuideScreen extends Screen {
         if (x >= 387 && x <= 410 && y >= 0 && y <= 20) { onClose(); return true; }
         if (y >= 247 && y <= 267) {
             if (x < 70) page = Math.max(0, page - 1);
+            else if (x >= 130 && x <= 180) page = 27;
             else if (x >= 70 && x <= 160) page = 17;
             else if (x >= 320 && x <= 370) page = 25;
             else if (x >= 270 && x <= 375) page = 13;
-            else if (x > 375) page = Math.min(26, page + 1);
+            else if (x > 375) page = Math.min(29, page + 1);
             else page = 0;
             return true;
         }

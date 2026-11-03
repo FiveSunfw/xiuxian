@@ -1,0 +1,15 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "minecraft:windswept_hills",
+    "minecraft:jagged_peaks",
+    "minecraft:stony_peaks",
+    "minecraft:meadow"
+  ],
+  "spawners": {
+    "type": "xiuxian:windfeather_eagle",
+    "weight": 3,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

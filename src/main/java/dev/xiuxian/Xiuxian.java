@@ -48,7 +48,7 @@ public class Xiuxian {
         bus.addListener((net.minecraftforge.event.BuildCreativeModeTabContentsEvent e) -> {
             if (e.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
                 for (HerbKind kind : HerbKind.values()) { e.accept(HERB_ITEMS.get(kind)); e.accept(ELIXIRS.get(kind)); }
-                e.accept(FoundationItems.BLANK); e.accept(FoundationItems.TESTER); for(var manual:FoundationItems.MANUALS.values()) e.accept(manual);
+                for(var egg:Beasts.EGGS.values()) e.accept(egg); for(var material:Beasts.MATERIALS.values())e.accept(material); e.accept(FoundationItems.BLANK); e.accept(FoundationItems.TESTER); for(var manual:FoundationItems.MANUALS.values()) e.accept(manual);
                 e.accept(FURNACE_ITEM); e.accept(CultivationResources.SPIRIT_COPPER); e.accept(Alchemy.FURNACE_ITEM); for(var item:Alchemy.ITEMS.values()) e.accept(item); e.accept(VeinBlocks.CORE_ITEM); e.accept(VeinBlocks.DEPLETED_ITEM);
                 for (var item : java.util.List.of(CultivationResources.ORE_ITEM, CultivationResources.DEEP_ORE_ITEM, CultivationResources.STONE, CultivationResources.STONE_2, CultivationResources.PILL, CultivationResources.MEAL)) e.accept(item);
             }
