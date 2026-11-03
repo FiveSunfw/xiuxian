@@ -1,0 +1,14 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:desert",
+    "minecraft:badlands",
+    "minecraft:eroded_badlands",
+    "minecraft:wooded_badlands",
+    "minecraft:savanna",
+    "minecraft:savanna_plateau",
+    "minecraft:windswept_savanna"
+  ],
+  "features": "xiuxian:scarlet_sun_herb",
+  "step": "vegetal_decoration"
+}

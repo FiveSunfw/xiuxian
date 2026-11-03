@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CSC",
+    "CFC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "xiuxian:spirit_copper_ingot"
+    },
+    "S": {
+      "item": "xiuxian:spirit_stone"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "xiuxian:basic_alchemy_furnace"
+  }
+}

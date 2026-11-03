@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:snowy_plains",
+    "minecraft:ice_spikes",
+    "minecraft:snowy_taiga",
+    "minecraft:grove",
+    "minecraft:snowy_slopes"
+  ],
+  "features": "xiuxian:frost_herb",
+  "step": "vegetal_decoration"
+}

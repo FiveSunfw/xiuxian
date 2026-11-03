@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "minecraft:ink_sac"
+    },
+    {
+      "item": "xiuxian:spirit_stone"
+    }
+  ],
+  "result": {
+    "item": "xiuxian:qi_gathering_formula"
+  }
+}

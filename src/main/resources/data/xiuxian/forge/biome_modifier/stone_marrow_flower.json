@@ -1,0 +1,13 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:frozen_peaks",
+    "minecraft:jagged_peaks",
+    "minecraft:stony_peaks",
+    "minecraft:windswept_hills",
+    "minecraft:windswept_gravelly_hills",
+    "minecraft:windswept_forest"
+  ],
+  "features": "xiuxian:stone_marrow_flower",
+  "step": "vegetal_decoration"
+}

@@ -1,0 +1,11 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+            content { includeGroupByRegex 'net\\.minecraftforge.*' }
+        }
+        gradlePluginPortal()
+    }
+}

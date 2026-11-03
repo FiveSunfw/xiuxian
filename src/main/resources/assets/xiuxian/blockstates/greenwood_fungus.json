@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "xiuxian:block/greenwood_fungus_0"
+    },
+    "age=1": {
+      "model": "xiuxian:block/greenwood_fungus_1"
+    },
+    "age=2": {
+      "model": "xiuxian:block/greenwood_fungus_2"
+    }
+  }
+}

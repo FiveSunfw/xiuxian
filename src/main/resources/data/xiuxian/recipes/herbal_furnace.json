@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CSC",
+    "C C",
+    "CFC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:cobblestone"
+    },
+    "S": {
+      "item": "xiuxian:spirit_stone"
+    },
+    "F": {
+      "item": "minecraft:campfire"
+    }
+  },
+  "result": {
+    "item": "xiuxian:herbal_furnace"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MSM",
+    "SBS",
+    "MSM"
+  ],
+  "key": {
+    "S": {
+      "item": "xiuxian:spirit_stone_tier_2"
+    },
+    "B": {
+      "item": "minecraft:book"
+    },
+    "M": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "result": {
+    "item": "xiuxian:breathing_manual_3"
+  }
+}

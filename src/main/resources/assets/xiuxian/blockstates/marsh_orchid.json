@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "xiuxian:block/marsh_orchid_0"
+    },
+    "age=1": {
+      "model": "xiuxian:block/marsh_orchid_1"
+    },
+    "age=2": {
+      "model": "xiuxian:block/marsh_orchid_2"
+    }
+  }
+}

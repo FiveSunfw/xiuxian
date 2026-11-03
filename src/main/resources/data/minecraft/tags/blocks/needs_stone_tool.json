@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "xiuxian:spirit_stone_ore",
+    "xiuxian:deepslate_spirit_stone_ore",
+    "xiuxian:spirit_vein_core",
+    "xiuxian:depleted_spirit_ore",
+    "xiuxian:depleted_deepslate_spirit_ore"
+  ]
+}

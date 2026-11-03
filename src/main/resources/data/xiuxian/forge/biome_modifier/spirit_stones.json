@@ -1,0 +1,11 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "xiuxian:scattered_spirit_stones",
+    "xiuxian:small_spirit_vein",
+    "xiuxian:medium_spirit_vein",
+    "xiuxian:large_spirit_vein"
+  ],
+  "step": "underground_ores"
+}
