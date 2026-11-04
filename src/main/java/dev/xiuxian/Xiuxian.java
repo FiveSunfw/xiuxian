@@ -53,6 +53,7 @@ public class Xiuxian {
     public Xiuxian() {
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
         ForgingContent.register();
+        SpiritualFarming.register();
         CultivationResources.register(bus);
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Cultivation.CONFIG);

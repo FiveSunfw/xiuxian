@@ -44,6 +44,7 @@ public class GuideScreen extends Screen {
             case 24 -> "sword_styles_title";
             case 25, 26 -> "spell_title";
             case 27, 28, 29 -> "beast_title";
+            case 30, 31 -> "farming_title";
             default -> "contents";
         });
     }
@@ -140,11 +141,12 @@ public class GuideScreen extends Screen {
             if (page >= 13) {
                 net.minecraft.world.level.ItemLike[] items = switch (page) {
                     case 13 -> new net.minecraft.world.level.ItemLike[]{FoundationItems.BLANK.get(), FoundationItems.TESTER.get(), FoundationItems.MANUALS.get("basic_sword").get()};
-                    case 14 -> new net.minecraft.world.level.ItemLike[]{Items.WHEAT, Items.APPLE, CultivationResources.MEAL.get()};
+                    case 14 -> new net.minecraft.world.level.ItemLike[]{SpiritualFarming.SOIL_ITEM.get(), SpiritualFarming.KITCHEN_ITEM.get(), SpiritualFarming.FOODS.get(SpiritFoodKind.BREAD).get(), SpiritualFarming.FOODS.get(SpiritFoodKind.DRINK).get()};
                     case 15 -> new net.minecraft.world.level.ItemLike[]{Alchemy.FURNACE_ITEM.get(), Alchemy.item("qi_gathering_formula"), CultivationResources.PILL.get(), Alchemy.item("pill_residue")};
                     default -> new net.minecraft.world.level.ItemLike[]{CultivationResources.ORE_ITEM.get(), VeinBlocks.CORE_ITEM.get(), VeinBlocks.DEPLETED_ITEM.get(), VeinBlocks.DEEP_DEPLETED_ITEM.get()};
                 };
                 for (int i=0;i<items.length;i++) icon(g, new ItemStack(items[i]), 239+(i%2)*76, 79+(i/2)*82, 48);
+                if (page == 14) g.drawString(font, label("farming_link"), 238, 225, 0xff694827, false);
             } else if (page == 10) {
                 for (int row = 0; row < 3; row++) for (int col = 0; col < 3; col++) {
                     int x = 241 + col * 42, y = 58 + row * 42;
@@ -188,10 +190,11 @@ public class GuideScreen extends Screen {
             else if (x >= 70 && x <= 160) page = 17;
             else if (x >= 320 && x <= 370) page = 25;
             else if (x >= 270 && x <= 375) page = 13;
-            else if (x > 375) page = Math.min(29, page + 1);
+            else if (x > 375) page = Math.min(31, page + 1);
             else page = 0;
             return true;
         }
+        if (page == 14 && x >= 229 && x <= 390 && y >= 216 && y < 242) { page = 30; return true; }
         if (page == 0 && x >= 26 && x <= 197 && y >= 46 && y < 238) { page = 1 + (int)(y-46)/16; return true; }
         if (page == 0 && x >= 234 && x < 394 && y >= 158 && y < 238) {
             page = 1 + (int)(x-234)/40 + 4*(int)((y-158)/40); return true;
@@ -199,7 +202,7 @@ public class GuideScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
     @Override public boolean keyPressed(int key, int scan, int modifiers) {
-        if (key == GLFW.GLFW_KEY_RIGHT) { page = Math.min(16, page + 1); return true; }
+        if (key == GLFW.GLFW_KEY_RIGHT) { page = Math.min(31, page + 1); return true; }
         if (key == GLFW.GLFW_KEY_LEFT) { page = Math.max(0, page - 1); return true; }
         return super.keyPressed(key, scan, modifiers);
     }

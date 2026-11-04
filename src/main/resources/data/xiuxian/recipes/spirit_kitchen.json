@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    [
+      {
+        "item": "minecraft:bricks"
+      },
+      {
+        "item": "minecraft:stone_bricks"
+      }
+    ],
+    [
+      {
+        "item": "minecraft:bricks"
+      },
+      {
+        "item": "minecraft:stone_bricks"
+      }
+    ],
+    [
+      {
+        "item": "minecraft:bricks"
+      },
+      {
+        "item": "minecraft:stone_bricks"
+      }
+    ],
+    [
+      {
+        "item": "minecraft:bricks"
+      },
+      {
+        "item": "minecraft:stone_bricks"
+      }
+    ],
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "xiuxian:spirit_stone"
+    },
+    [
+      {
+        "item": "minecraft:campfire"
+      },
+      {
+        "item": "minecraft:furnace"
+      }
+    ]
+  ],
+  "result": {
+    "item": "xiuxian:spirit_kitchen"
+  }
+}

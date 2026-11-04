@@ -1,0 +1,11 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:meadow",
+    "minecraft:river"
+  ],
+  "features": "xiuxian:wild_jade_rice",
+  "step": "vegetal_decoration"
+}

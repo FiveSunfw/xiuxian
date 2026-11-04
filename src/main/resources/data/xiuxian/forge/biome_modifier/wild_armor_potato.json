@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:windswept_hills",
+    "minecraft:windswept_gravelly_hills",
+    "minecraft:windswept_forest",
+    "minecraft:stony_shore",
+    "minecraft:stony_peaks"
+  ],
+  "features": "xiuxian:wild_armor_potato",
+  "step": "vegetal_decoration"
+}

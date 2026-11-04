@@ -30,20 +30,26 @@ public final class SpiritVeins extends SavedData {
         var bucket=chunks.get(ChunkPos.asLong(pos));
         if(bucket!=null) { bucket.remove(pos); if(bucket.isEmpty()) chunks.remove(ChunkPos.asLong(pos)); setDirty(); }
     }
-    private List<Core> nearby(BlockPos pos) {
+    private List<Core> nearby(BlockPos pos) { return nearby(pos, 0); }
+    private List<Core> nearby(BlockPos pos, int extraRadius) {
         List<Core> result=new ArrayList<>(); int cx=pos.getX()>>4, cz=pos.getZ()>>4;
-        int range=(Collections.max(Cultivation.VEIN_RADII.stream().map(v -> v.get()).toList())+15)/16;
+        int range=(Collections.max(Cultivation.VEIN_RADII.stream().map(v -> v.get()).toList())+Math.max(0, extraRadius)+15)/16;
         for(int x=cx-range;x<=cx+range;x++) for(int z=cz-range;z<=cz+range;z++) {
             var bucket=chunks.get(ChunkPos.asLong(x,z)); if(bucket!=null) result.addAll(bucket.values());
         }
         return result;
     }
     double multiplier(Player player) {
+        int extra = player.hasEffect(SpiritualFarming.STARLIGHT.get()) ? 8 : 0;
+        return multiplierAt(player.getX(), player.getY(), player.getZ(), extra);
+    }
+    double multiplierAt(BlockPos pos) { return multiplierAt(pos.getX()+.5, pos.getY(), pos.getZ()+.5, 0); }
+    private double multiplierAt(double x, double y, double z, int extraRadius) {
         double best=1;
-        for(Core core:nearby(player.blockPosition())) {
-            if(player.getY()<core.pos.getY() || player.getY()>core.surface+16) continue;
-            double distance=Math.hypot(player.getX()-core.pos.getX()-.5,player.getZ()-core.pos.getZ()-.5);
-            double fraction=Math.max(0,1-distance/Cultivation.VEIN_RADII.get(core.tier-1).get());
+        for(Core core:nearby(BlockPos.containing(x,y,z), extraRadius)) {
+            if(y<core.pos.getY() || y>core.surface+16) continue;
+            double distance=Math.hypot(x-core.pos.getX()-.5,z-core.pos.getZ()-.5);
+            double fraction=Math.max(0,1-distance/(Cultivation.VEIN_RADII.get(core.tier-1).get()+extraRadius));
             best=Math.max(best,1+(Cultivation.VEIN_MULTIPLIERS.get(core.tier-1).get()-1)*fraction);
         }
         return best;

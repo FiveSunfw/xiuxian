@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:forest",
+    "minecraft:flower_forest",
+    "minecraft:birch_forest",
+    "minecraft:old_growth_birch_forest",
+    "minecraft:plains"
+  ],
+  "features": "xiuxian:wild_green_spirit_wheat",
+  "step": "vegetal_decoration"
+}

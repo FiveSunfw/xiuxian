@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "xiuxian:block/spirit_farmland_bottom",
+    "up": "xiuxian:block/spirit_farmland_top",
+    "north": "xiuxian:block/spirit_farmland_north",
+    "south": "xiuxian:block/spirit_farmland_south",
+    "east": "xiuxian:block/spirit_farmland_east",
+    "west": "xiuxian:block/spirit_farmland_west",
+    "particle": "xiuxian:block/spirit_farmland_north"
+  }
+}

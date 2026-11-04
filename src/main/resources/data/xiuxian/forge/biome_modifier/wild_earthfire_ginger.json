@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "xiuxian:wild_earthfire_ginger",
+  "step": "vegetal_decoration"
+}

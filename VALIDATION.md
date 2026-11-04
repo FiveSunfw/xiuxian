@@ -248,3 +248,11 @@ JAR：build/releases/xiuxian-0.4.0.jar。SHA256：961C0B4E478C28B2D443EA58BD0548
 ## 0.4.5 炼器成品槽同步修复（2026-11-04）
 
 修复ForgingTableEntity.setItem拦截输出槽和忙碌状态下客户端同步。新增GameTest模拟完成注灵、NBT保存恢复、通过Slot.set同步输出与取出，并检查输出槽拒绝玩家插入；37项必需GameTest通过。JAR构建成功并已安装客户端，SHA256：467A4814793924A695398BAD1824AC7B947A52DB298E091AB05F7F46E842FBC5；旧包已备份至E盘。未启动用户客户端。
+
+
+## 2026-11-04：0.5.0 灵植农耕与灵食
+
+- `build.ps1 runGameTestServer --offline --console=plain --max-workers=1 --exclude-task downloadAssets --init-script .tools/test-runtime.init.gradle`：40 项必需 GameTest 全部通过。新增检查覆盖八种灵植在灵田上的存活及骨粉、部分自然生长条件、八道菜的煤火烹饪、灵火 80 tick、堵塞成品槽以及进度 NBT 保存。
+- `build.ps1 build --offline --console=plain --max-workers=1 --exclude-task downloadAssets --init-script .tools/test-runtime.init.gradle`：构建成功。503 个资源 JSON 解析成功，抽查 JAR 包含灵厨灶、植物、贴图、灵田配方和地下灵植生成资源。
+- 产物：`build/releases/xiuxian-0.5.0.jar`，SHA256 `225B2B3BB20B2E3FF8BF5F7779AF03997407D9F55F711F93EAB4C931E38F3FD5`。
+- 未进行用户客户端试玩、世界自然生成概率验证、所有灵食效果的逐项实机验证及双人独立服验收。

@@ -16,9 +16,9 @@ import java.util.*;
 @JeiPlugin
 public class XiuxianJeiPlugin implements IModPlugin {
     public record Entry(List<ItemStack> inputs,ItemStack output){}
-    static final RecipeType<Entry> BREW=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"herbal_brewing"),Entry.class), PILL=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"alchemy"),Entry.class), FORGE=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"forging"),Entry.class);
+    static final RecipeType<Entry> BREW=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"herbal_brewing"),Entry.class), PILL=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"alchemy"),Entry.class), FORGE=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"forging"),Entry.class), KITCHEN=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"spirit_cooking"),Entry.class);
     @Override public ResourceLocation getPluginUid(){return new ResourceLocation(Xiuxian.ID,"jei");}
-    @Override public void registerCategories(IRecipeCategoryRegistration r){var gui=r.getJeiHelpers().getGuiHelper();r.addRecipeCategories(new Category(gui,BREW,Xiuxian.FURNACE_ITEM.get()),new Category(gui,PILL,Alchemy.FURNACE_ITEM.get()),new Category(gui,FORGE,ForgingContent.BASIC_FORGING_TABLE_ITEM.get()));}
+    @Override public void registerCategories(IRecipeCategoryRegistration r){var gui=r.getJeiHelpers().getGuiHelper();r.addRecipeCategories(new Category(gui,BREW,Xiuxian.FURNACE_ITEM.get()),new Category(gui,PILL,Alchemy.FURNACE_ITEM.get()),new Category(gui,FORGE,ForgingContent.BASIC_FORGING_TABLE_ITEM.get()),new Category(gui,KITCHEN,SpiritualFarming.KITCHEN_ITEM.get()));}
     @Override public void registerRecipes(IRecipeRegistration r){
         List<Entry> brews=new ArrayList<>();
         for(var kind:HerbKind.values())brews.add(new Entry(List.of(new ItemStack(Xiuxian.HERB_ITEMS.get(kind).get()),water()),new ItemStack(Xiuxian.ELIXIRS.get(kind).get())));
@@ -40,9 +40,16 @@ public class XiuxianJeiPlugin implements IModPlugin {
             }
         }
         r.addRecipes(FORGE,forging);
+        List<Entry> meals=new ArrayList<>();
+        for(var recipe:SpiritKitchenRecipes.all())for(var main:recipe.mains())for(var fuel:List.of(Items.COAL,CultivationResources.STONE.get())){
+            List<ItemStack> ingredients=new ArrayList<>();ingredients.add(new ItemStack(main));ingredients.add(new ItemStack(SpiritualFarming.PLANTS.get(recipe.plant()).get(),recipe.plantCount()));
+            if(recipe.container()!=null)ingredients.add(new ItemStack(recipe.container()));ingredients.add(new ItemStack(fuel));
+            meals.add(new Entry(ingredients,recipe.output()));
+        }
+        r.addRecipes(KITCHEN,meals);
     }
     static ItemStack water(){return PotionUtils.setPotion(new ItemStack(Items.POTION),Potions.WATER);}
-    @Override public void registerRecipeCatalysts(IRecipeCatalystRegistration r){r.addRecipeCatalyst(new ItemStack(Xiuxian.FURNACE_ITEM.get()),BREW);r.addRecipeCatalyst(new ItemStack(Alchemy.FURNACE_ITEM.get()),PILL);r.addRecipeCatalyst(new ItemStack(ForgingContent.BASIC_FORGING_TABLE_ITEM.get()),FORGE);}
+    @Override public void registerRecipeCatalysts(IRecipeCatalystRegistration r){r.addRecipeCatalyst(new ItemStack(Xiuxian.FURNACE_ITEM.get()),BREW);r.addRecipeCatalyst(new ItemStack(Alchemy.FURNACE_ITEM.get()),PILL);r.addRecipeCatalyst(new ItemStack(ForgingContent.BASIC_FORGING_TABLE_ITEM.get()),FORGE);r.addRecipeCatalyst(new ItemStack(SpiritualFarming.KITCHEN_ITEM.get()),KITCHEN);}
     static class Category implements IRecipeCategory<Entry>{
         final RecipeType<Entry> type; final Item machine; final IDrawable bg,icon;
         Category(IGuiHelper gui,RecipeType<Entry> type,Item machine){this.type=type;this.machine=machine;bg=gui.createBlankDrawable(170,65);icon=gui.createDrawableIngredient(VanillaTypes.ITEM_STACK,new ItemStack(machine));}
@@ -51,6 +58,6 @@ public class XiuxianJeiPlugin implements IModPlugin {
         @Override public IDrawable getBackground(){return bg;}
         @Override public IDrawable getIcon(){return icon;}
         @Override public void setRecipe(IRecipeLayoutBuilder b,Entry e,IFocusGroup f){for(int i=0;i<e.inputs().size();i++)b.addSlot(RecipeIngredientRole.INPUT,4+i*25,12).addItemStack(e.inputs().get(i));b.addSlot(RecipeIngredientRole.OUTPUT,148,12).addItemStack(e.output());}
-        @Override public void draw(Entry e,mezz.jei.api.gui.ingredient.IRecipeSlotsView slots,net.minecraft.client.gui.GuiGraphics g,double x,double y){Component hint=type==PILL?Component.translatable("jei.xiuxian.alchemy"):type==FORGE?Component.translatable("jei.xiuxian.forging"):Component.literal("→");g.drawString(net.minecraft.client.Minecraft.getInstance().font,hint,4,43,0xff604a35,false);}
+        @Override public void draw(Entry e,mezz.jei.api.gui.ingredient.IRecipeSlotsView slots,net.minecraft.client.gui.GuiGraphics g,double x,double y){Component hint=type==PILL?Component.translatable("jei.xiuxian.alchemy"):type==FORGE?Component.translatable("jei.xiuxian.forging"):type==KITCHEN?Component.translatable("jei.xiuxian.kitchen"):Component.literal("→");g.drawString(net.minecraft.client.Minecraft.getInstance().font,hint,4,43,0xff604a35,false);}
     }
 }

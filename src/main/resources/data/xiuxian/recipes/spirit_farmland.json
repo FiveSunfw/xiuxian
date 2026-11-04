@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DBD",
+    "BSB",
+    "DBD"
+  ],
+  "key": {
+    "D": {
+      "item": "minecraft:dirt"
+    },
+    "B": {
+      "item": "minecraft:bone_meal"
+    },
+    "S": {
+      "item": "xiuxian:spirit_stone"
+    }
+  },
+  "result": {
+    "item": "xiuxian:spirit_farmland",
+    "count": 4
+  }
+}

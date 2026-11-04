@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "xiuxian:block/green_spirit_wheat_0"
+    },
+    "age=1": {
+      "model": "xiuxian:block/green_spirit_wheat_1"
+    },
+    "age=2": {
+      "model": "xiuxian:block/green_spirit_wheat_2"
+    },
+    "age=3": {
+      "model": "xiuxian:block/green_spirit_wheat_3"
+    }
+  }
+}

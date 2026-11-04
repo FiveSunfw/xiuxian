@@ -1,0 +1,14 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:meadow",
+    "minecraft:flower_forest",
+    "minecraft:jagged_peaks",
+    "minecraft:frozen_peaks",
+    "minecraft:stony_peaks",
+    "minecraft:snowy_slopes",
+    "minecraft:grove"
+  ],
+  "features": "xiuxian:wild_star_flower",
+  "step": "vegetal_decoration"
+}

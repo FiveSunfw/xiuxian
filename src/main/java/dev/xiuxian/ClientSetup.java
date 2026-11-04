@@ -30,7 +30,9 @@ public class ClientSetup {
             MenuScreens.register(Xiuxian.FURNACE_MENU.get(), FurnaceScreen::new);
             MenuScreens.register(Alchemy.MENU.get(), AlchemyScreen::new);
             MenuScreens.register(ForgingContent.MENU.get(), ForgingScreen::new);
+            MenuScreens.register(SpiritualFarming.MENU.get(), SpiritKitchenScreen::new);
             for (var herb : Xiuxian.HERBS.values()) ItemBlockRenderTypes.setRenderLayer(herb.get(), RenderType.cutout());
+            for (var crop : SpiritualFarming.CROPS.values()) ItemBlockRenderTypes.setRenderLayer(crop.get(), RenderType.cutout());
         });
     }
     private static void sendCombat(boolean cycle) {

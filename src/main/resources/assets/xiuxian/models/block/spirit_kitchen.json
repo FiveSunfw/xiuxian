@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "xiuxian:block/spirit_kitchen_top",
+    "side": "xiuxian:block/spirit_kitchen_side",
+    "front": "xiuxian:block/spirit_kitchen_front"
+  }
+}

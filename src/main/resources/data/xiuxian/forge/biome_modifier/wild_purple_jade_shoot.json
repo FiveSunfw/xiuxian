@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:bamboo_jungle",
+    "minecraft:jungle",
+    "minecraft:sparse_jungle"
+  ],
+  "features": "xiuxian:wild_purple_jade_shoot",
+  "step": "vegetal_decoration"
+}
