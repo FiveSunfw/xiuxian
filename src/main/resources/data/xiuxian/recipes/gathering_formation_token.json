@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GAK",
+    "AHA",
+    "KAG"
+  ],
+  "key": {
+    "G": {
+      "item": "xiuxian:spirit_gold_ingot"
+    },
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "K": {
+      "item": "minecraft:gold_ingot"
+    },
+    "H": {
+      "item": "xiuxian:formation_heart_stone"
+    }
+  },
+  "result": {
+    "item": "xiuxian:gathering_formation_token",
+    "count": 1
+  }
+}

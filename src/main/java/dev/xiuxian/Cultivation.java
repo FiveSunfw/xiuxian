@@ -40,7 +40,7 @@ public class Cultivation {
     public static final ForgeConfigSpec.DoubleValue HERB_CHANCE, LIQUID_CHANCE, HEALTH_PER_LEVEL, DAMAGE_PER_LEVEL;
     public static final ForgeConfigSpec.IntValue PROGRESS_PER_SECOND, BASE_PROGRESS;
     public static final ForgeConfigSpec.BooleanValue GIVE_GUIDE_ON_FIRST_JOIN, AUTO_CULTIVATION;
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(Xiuxian.ID, "state"), () -> "11", "11"::equals, "11"::equals);
+    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(Xiuxian.ID, "state"), () -> "13", "13"::equals, "13"::equals);
     static {
         var builder = new ForgeConfigSpec.Builder();
         // Preserve the existing config key when replacing leaves with whole herbs.
@@ -111,7 +111,7 @@ public class Cultivation {
         if (manual != null) multiplier = manual.cultivationMultiplier();
         multiplier *= CultivationFoundation.aptitude(player);
         if (player.hasEffect(CultivationResources.NOURISHMENT.get())) multiplier *= FOOD_MULTIPLIER.get();
-        if (player.level() instanceof net.minecraft.server.level.ServerLevel server) multiplier *= SpiritVeins.get(server).multiplier(player);
+        if (player.level() instanceof net.minecraft.server.level.ServerLevel server) multiplier *= SpiritVeins.get(server).multiplier(player) * Formations.gathering(server,player.blockPosition());
         multiplier *= player.hasEffect(Alchemy.QI.get()) ? 1.35 : player.hasEffect(Alchemy.WARM.get()) ? 1.15 : 1;
         return PROGRESS_PER_SECOND.get() * multiplier;
     }
@@ -172,22 +172,22 @@ public class Cultivation {
         float gained = player.getMaxHealth() - oldMaximum;
         if (gained > 0) player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + gained));
     }
-    public record State(int level, int points, int required, double attackDamage, int technique, double rate) {}
+    public record State(int level, int points, int required, double attackDamage, int technique, double rate, double formation) {}
     public static void registerNetwork() {
         CultivationFoundation.registerNetwork();
         SwordCombat.network();
         SwordBookNetwork.register();
         SpellManuals.network();
         CHANNEL.messageBuilder(State.class, 0, NetworkDirection.PLAY_TO_CLIENT)
-            .encoder((msg, buf) -> { buf.writeVarInt(msg.level()); buf.writeVarInt(msg.points()); buf.writeVarInt(msg.required()); buf.writeDouble(msg.attackDamage()); buf.writeVarInt(msg.technique()); buf.writeDouble(msg.rate()); })
-            .decoder(buf -> new State(buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readDouble(), buf.readVarInt(), buf.readDouble()))
-            .consumerMainThread((msg, ctx) -> { ClientState.level = msg.level(); ClientState.points = msg.points(); ClientState.required = msg.required(); ClientState.attackDamage = msg.attackDamage(); ClientState.technique = msg.technique(); ClientState.rate = msg.rate(); ctx.get().setPacketHandled(true); }).add();
+            .encoder((msg, buf) -> { buf.writeVarInt(msg.level()); buf.writeVarInt(msg.points()); buf.writeVarInt(msg.required()); buf.writeDouble(msg.attackDamage()); buf.writeVarInt(msg.technique()); buf.writeDouble(msg.rate()); buf.writeDouble(msg.formation()); })
+            .decoder(buf -> new State(buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readDouble(), buf.readVarInt(), buf.readDouble(), buf.readDouble()))
+            .consumerMainThread((msg, ctx) -> { ClientState.level = msg.level(); ClientState.points = msg.points(); ClientState.required = msg.required(); ClientState.attackDamage = msg.attackDamage(); ClientState.technique = msg.technique(); ClientState.rate = msg.rate(); ClientState.formation = msg.formation(); ctx.get().setPacketHandled(true); }).add();
     }
     public static void sync(ServerPlayer player) {
         CultivationFoundation.sync(player);
         SpellManuals.sync(player);
         CultivationProgress state = progress(player);
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new State(state.level(), state.points(), state.required(progressBase()), player.getAttributeValue(Attributes.ATTACK_DAMAGE), technique(player), cultivationRate(player)));
+        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new State(state.level(), state.points(), state.required(progressBase()), player.getAttributeValue(Attributes.ATTACK_DAMAGE), technique(player), cultivationRate(player), Formations.gathering(player.serverLevel(),player.blockPosition())));
     }
     @SubscribeEvent public static void tick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END || !(event.player instanceof ServerPlayer player) || player.tickCount % 20 != 0) return;

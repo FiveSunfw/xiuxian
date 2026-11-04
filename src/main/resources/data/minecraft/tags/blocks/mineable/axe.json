@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "xiuxian:talisman_table"
+    "xiuxian:talisman_table",
+    "xiuxian:formation_flag"
   ]
 }

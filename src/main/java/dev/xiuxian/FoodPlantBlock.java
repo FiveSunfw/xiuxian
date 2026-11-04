@@ -84,6 +84,7 @@ public final class FoodPlantBlock extends BushBlock implements BonemealableBlock
                 amount += 1 + level.random.nextInt(2);
             popResource(level, pos, new ItemStack(SpiritualFarming.PLANTS.get(kind).get(), amount));
             level.setBlock(pos, state.setValue(AGE, 1), 3);
+            if(level instanceof ServerLevel server)FormationIndex.get(server).plantChanged(pos,false);
             level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1, .9F + level.random.nextFloat() * .2F);
         }
         return InteractionResult.sidedSuccess(level.isClientSide);

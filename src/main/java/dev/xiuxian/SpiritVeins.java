@@ -77,7 +77,10 @@ public final class SpiritVeins extends SavedData {
     }
     @SubscribeEvent public static void tick(TickEvent.LevelTickEvent event) {
         if(event.phase!=TickEvent.Phase.END || !(event.level instanceof ServerLevel level) || level.getGameTime()%20!=0) return;
-        SpiritVeins data=get(level);
+        get(level).regenerate(level);
+    }
+    void regenerate(ServerLevel level) {
+        SpiritVeins data=this;
         for(var bucket:data.chunks.values()) for(Core core:bucket.values()) {
             if(level.hasChunkAt(core.pos) && !level.getBlockState(core.pos).is(VeinBlocks.CORE.get())) continue;
             var iterator=core.ores.entrySet().iterator();
@@ -86,7 +89,7 @@ public final class SpiritVeins extends SavedData {
                 if(!level.hasChunkAt(pos)) continue;
                 var state=level.getBlockState(pos);
                 if(state.is(VeinBlocks.DEPLETED.get()) || state.is(VeinBlocks.DEEP_DEPLETED.get())) {
-                    int seconds=ore.getValue()+1;
+                    int seconds=ore.getValue()+1+(Formations.gathering(level,pos)>1?1:0);
                     if(seconds>=Cultivation.VEIN_REGEN_SECONDS.get()) {
                         level.setBlockAndUpdate(pos,(state.is(VeinBlocks.DEEP_DEPLETED.get())?CultivationResources.DEEP_ORE:CultivationResources.ORE).get().defaultBlockState()); seconds=0;
                     }

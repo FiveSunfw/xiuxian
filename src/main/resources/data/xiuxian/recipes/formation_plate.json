@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SCS",
+    "GTG",
+    "S S"
+  ],
+  "key": {
+    "S": [
+      {
+        "item": "minecraft:smooth_stone"
+      },
+      {
+        "item": "minecraft:deepslate_bricks"
+      }
+    ],
+    "C": {
+      "item": "xiuxian:spirit_cinnabar"
+    },
+    "G": {
+      "item": "xiuxian:spirit_gold_ingot"
+    },
+    "T": {
+      "item": "xiuxian:spirit_stone_tier_2"
+    }
+  },
+  "result": {
+    "item": "xiuxian:formation_plate",
+    "count": 1
+  }
+}

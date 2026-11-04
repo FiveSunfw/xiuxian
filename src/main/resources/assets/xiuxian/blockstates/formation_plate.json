@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "xiuxian:block/formation_plate"
+    },
+    "lit=true": {
+      "model": "xiuxian:block/formation_plate_active"
+    }
+  }
+}

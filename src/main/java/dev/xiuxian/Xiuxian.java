@@ -56,6 +56,7 @@ public class Xiuxian {
         ForgingContent.register();
         SpiritualFarming.register();
         Talismans.register();
+        Formations.register();
         CultivationResources.register(bus);
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Cultivation.CONFIG);

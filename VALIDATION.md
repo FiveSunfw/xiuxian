@@ -265,3 +265,26 @@ JAR：build/releases/xiuxian-0.4.0.jar。SHA256：961C0B4E478C28B2D443EA58BD0548
 - `build` 与 `reobfJar` 成功。JEI仍有既存getBackground弃用警告；没有新增依赖。535个JSON解析、模型纹理引用、符箓中英文键检查成功。已离线查看初版贴图合集，并抽查JAR类、模型、掉落/配方与世界生成资源。
 - 产物：`build/releases/xiuxian-0.6.0.jar`，SHA256：`6673997D658C386F1376636262F08E1958BE21B7B7CB5A29C0172542FBA40FA3`。
 - 开发测试运行于项目Forge 47.3.0基线；47.4.28客户端实际运行兼容性待用户验收。未启动/修改用户客户端，未验证用户世界实际生成密度或真实双人服。菜单、JEI、特效、跨步和实际多人操作仍需试玩；NBT读取验证不等同于完整进程重启验收。
+
+
+## 2026-11-04：0.7.0 阵法与洞府
+
+- 实际命令：`build.ps1 runGameTestServer build --offline --console=plain --max-workers=1 --exclude-task downloadAssets --init-script .tools/test-runtime.init.gradle --init-script scripts/isolated-gametests.init.gradle`。构建使用项目Forge 47.3.0 / Java 17基线。
+- 最终在`build/game-tests/formations-1793760078767`独立新世界运行，63项必需GameTest全部通过（原50项+阵法13项），日志记录于该目录logs/latest.log；Gradle build、jar、reobfJar成功。
+- 覆盖六配方与材料解耦、大小阵/高度容差/回退/共旗、拆旗与红石、旗区块卸载、双燃料/小数/免维持/核心变化、吐纳叠加与单次回蓝、普通/深层矿半时恢复、植物随机刻条件/重叠限次/1024扫描预算、爆炸列表内外保护/重叠一次收费、自然生成来源、怪物破坏/末影人拾取边界及全局规则关闭不收费、增益真实回血、攻伐目标数/费用/多阵独立伤害/25%不叠加/离线阵主、真实妖兽掉落与经验、菜单权限及NBT读取。
+- 矿石恢复以900次每秒逻辑结算验证默认15分钟效果，没有等待实际15分钟。旗区块卸载测试模拟索引通知，并非真实用户世界的区块流送压力测试；NBT往返不是完整进程重启验收。
+- 开发中旧测试世界保留多轮方块、实体和灵脉数据，曾发生旧飞剑射线及基础伤害断言波动；保留原断言，采用宽阵法场地、独立批次与每次新世界后通过。没有改动飞剑生产逻辑来绕过测试。
+- 557个JSON均可解析，检查模型自有纹理引用和阵法中英文键，六张配方不包含丹药药液。JAR含阵盘/事件/界面类、模型、心石配方、专用伤害类型和绕过护甲/受伤冷却标签；版本元数据0.7.0。初版图标已离线生成预览，客户端模型仍待实机检查。
+- 产物：`build/releases/xiuxian-0.7.0.jar`，SHA256：`6DD4DF574844220A430DF02F40A3E4777EF2C6D01CDDF82258B67C295CC7B4FF`。
+- Forge47.4.28客户端、用户存档升级、真实双人操作、菜单/JEI/粒子/K显示、长时间挂机/离线重启和大规模负载未实机验收；不宣称这些已通过。末影人使用原版位置资格事件并扩展2格拾取边界，可能在实际搬块前收费；其他模组绕过Forge事件直接改块不在保证范围。未启动或修改用户客户端。
+
+最终交付前发现K面板新增倍率与原灵食剩余时间使用同一行同一横坐标，已将灵食文字移至右侧避免重叠；仅客户端布局变化，随后再次build/reobfJar成功并更新上述JAR校验值，未重复无关游戏测试。
+
+
+## 2026-11-04：0.7.1 阵法独立供能
+
+- 执行`build.ps1 runGameTestServer build --offline --console=plain --max-workers=1 --exclude-task downloadAssets --init-script .tools/test-runtime.init.gradle --init-script scripts/isolated-gametests.init.gradle`，独立世界`build/game-tests/formations-1793760570939`中63项必需测试全部通过，Gradle build/reobfJar成功。
+- 更新回归：强灵脉上仍需能源、维护费与无灵脉一致、拆核心不影响阵盘运行/重复扣费；小阵始终1.35、大阵1.50，多攻伐阵在强灵脉处仍分别造成固定10伤害。保留玩家原灵脉修炼倍率、有效绑定矿石的再生规则及其阵法加速检查。
+- 移除阵盘共振显示与查询，菜单数据槽6改5，协议13；NBT库存/能量/所有者格式兼容。引导书与JEI文字、当前设计同步为固定效果，无免费维持。
+- 557个JSON解析成功；JAR版本、阵盘/菜单/界面类与配方资源检查通过。产物`build/releases/xiuxian-0.7.1.jar`，SHA256：`4D18F1FAFD914AB68FF62BF22AB409CEBCE3535954F5145D1DE148FE6CAD68FF`。
+- Forge47.4.28客户端画面、旧用户存档和真实双人操作仍待用户试玩；未启动或替换客户端。

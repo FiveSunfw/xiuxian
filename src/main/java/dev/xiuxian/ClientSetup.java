@@ -35,6 +35,7 @@ public class ClientSetup {
             MenuScreens.register(ForgingContent.MENU.get(), ForgingScreen::new);
             MenuScreens.register(SpiritualFarming.MENU.get(), SpiritKitchenScreen::new);
             MenuScreens.register(Talismans.MENU.get(), TalismanScreen::new);
+            MenuScreens.register(Formations.MENU.get(), FormationScreen::new);
             for (var herb : Xiuxian.HERBS.values()) ItemBlockRenderTypes.setRenderLayer(herb.get(), RenderType.cutout());
             for (var crop : SpiritualFarming.CROPS.values()) ItemBlockRenderTypes.setRenderLayer(crop.get(), RenderType.cutout());
         });
@@ -108,8 +109,9 @@ public class ClientSetup {
                 g.drawString(font,Component.translatable(practice.required()==0?"spell.xiuxian.rank_full":"spell.xiuxian.rank",practice.rank(),(int)practice.points(),practice.required()),18,190,0xffd6b982);
             }
             if(ClientState.level>0&&!full)g.drawString(font,Component.translatable(ClientState.rate>0?"screen.xiuxian.breathing":"screen.xiuxian.breathing_paused",String.format(java.util.Locale.ROOT,"%.2f",ClientState.rate)),18,205,0xff99ab9d);
+            g.drawString(font,Component.translatable("screen.xiuxian.formation",String.format(java.util.Locale.ROOT,"%.3f",ClientState.formation)),18,220,0xff91dce0);
             var food=minecraft.player.getEffect(CultivationResources.NOURISHMENT.get());
-            if(food!=null)g.drawString(font,Component.translatable("screen.xiuxian.food_time",food.getDuration()/20),18,220,0xffc4d998);
+            if(food!=null)g.drawString(font,Component.translatable("screen.xiuxian.food_time",food.getDuration()/20),170,220,0xffc4d998);
             if(state!=null&&state.blocked()&&!full)g.drawString(font,Component.translatable("screen.xiuxian.manual_gate"),18,234,0xffe2c38d);
             g.pose().popPose();
             super.render(g,mouseX,mouseY,partial);

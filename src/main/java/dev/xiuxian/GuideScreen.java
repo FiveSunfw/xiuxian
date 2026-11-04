@@ -46,6 +46,7 @@ public class GuideScreen extends Screen {
             case 27, 28, 29 -> "beast_title";
             case 30, 31 -> "farming_title";
             case 32, 33, 34, 35 -> "talisman_title";
+            case 36, 37, 38, 39, 40 -> "formation_title";
             default -> "contents";
         });
     }
@@ -94,6 +95,19 @@ public class GuideScreen extends Screen {
             heading(g, label("atlas"), 229, 27);
             paragraph(g, label("overview"), 229, 50, 159);
             for (int i = 0; i < 8; i++) icon(g, herb(herbs[i]), 234 + i % 4 * 40, 158 + i / 4 * 40, 28);
+        } else if (page >= 36) {
+            heading(g,chapter(page),29,27);heading(g,label("details"),229,27);
+            paragraph(g,label("new_"+page+"_right"),229,50,159);
+            if(page==37) {
+                icon(g,new ItemStack(Formations.PLATE_ITEM.get()),93,117,30);
+                for(int[] offset:new int[][]{{93,57},{93,177},{33,117},{153,117}})icon(g,new ItemStack(Formations.FLAG_ITEM.get()),offset[0],offset[1],24);
+                g.drawString(font,"4 / 8",95,95,0xff694827,false);
+                g.drawString(font,"4 / 8",52,151,0xff694827,false);
+            } else {
+                paragraph(g,label("new_"+page+"_left"),29,50,159);
+                net.minecraft.world.item.Item item=page==36?Formations.HEART.get():Formations.TOKENS.get(page==38?FormationKind.GATHERING:page==39?FormationKind.GUARDIAN:FormationKind.ASSAULT).get();
+                icon(g,new ItemStack(item),66,200,30);icon(g,new ItemStack(Formations.PLATE_ITEM.get()),270,200,30);
+            }
         } else if (page >= 32) {
             heading(g,chapter(page),29,27);paragraph(g,label("new_"+page+"_left"),29,50,159);
             heading(g,label("details"),229,27);paragraph(g,label("new_"+page+"_right"),229,50,159);
@@ -175,6 +189,7 @@ public class GuideScreen extends Screen {
                 for (int i = 0; i < herbs.length; i++) icon(g, page == 12 ? elixir(herbs[i]) : herb(herbs[i]), 239 + i % 4 * 39, 85 + i / 4 * 61, 30);
             }
         }
+        g.drawString(font, label("formation_link"), 29, 237, 0xff694827, false);
         g.drawString(font, label("talisman_link"), 239, 237, 0xff694827, false);
         g.drawString(font, label("beast_tab"), 140, 251, 0xfff2ddb5, false);
         g.drawString(font, label("spell_tab"), 325, 251, 0xfff2ddb5, false);
@@ -197,10 +212,11 @@ public class GuideScreen extends Screen {
             else if (x >= 70 && x <= 160) page = 17;
             else if (x >= 320 && x <= 370) page = 25;
             else if (x >= 270 && x <= 375) page = 13;
-            else if (x > 375) page = Math.min(35, page + 1);
+            else if (x > 375) page = Math.min(40, page + 1);
             else page = 0;
             return true;
         }
+        if (x >= 27 && x <= 192 && y >= 234 && y < 247) { page = 36; return true; }
         if (x >= 237 && x <= 380 && y >= 234 && y < 247) { page = 32; return true; }
         if (page == 14 && x >= 229 && x <= 390 && y >= 216 && y < 242) { page = 30; return true; }
         if (page == 0 && x >= 26 && x <= 197 && y >= 46 && y < 238) { page = 1 + (int)(y-46)/16; return true; }
@@ -210,7 +226,7 @@ public class GuideScreen extends Screen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
     @Override public boolean keyPressed(int key, int scan, int modifiers) {
-        if (key == GLFW.GLFW_KEY_RIGHT) { page = Math.min(35, page + 1); return true; }
+        if (key == GLFW.GLFW_KEY_RIGHT) { page = Math.min(40, page + 1); return true; }
         if (key == GLFW.GLFW_KEY_LEFT) { page = Math.max(0, page - 1); return true; }
         return super.keyPressed(key, scan, modifiers);
     }

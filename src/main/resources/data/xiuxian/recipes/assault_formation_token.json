@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "Q Q",
+    "CSC",
+    "QHQ"
+  ],
+  "key": {
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "C": {
+      "item": "xiuxian:cinnabar"
+    },
+    "S": {
+      "item": "xiuxian:spirit_gold_sword"
+    },
+    "H": {
+      "item": "xiuxian:formation_heart_stone"
+    }
+  },
+  "result": {
+    "item": "xiuxian:assault_formation_token",
+    "count": 1
+  }
+}

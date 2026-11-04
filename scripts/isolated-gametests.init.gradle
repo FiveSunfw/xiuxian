@@ -1,0 +1,6 @@
+gradle.projectsEvaluated {
+    def project = gradle.rootProject
+    def isolated = project.file("build/game-tests/formations-${System.currentTimeMillis()}")
+    isolated.mkdirs()
+    project.minecraft.runs.gameTestServer.workingDirectory(isolated)
+}

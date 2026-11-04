@@ -52,6 +52,7 @@ public class XiuxianJeiPlugin implements IModPlugin {
         for(var kind:TalismanKind.values())for(boolean enhanced:new boolean[]{false,true})
             talismans.add(new Entry(List.of(new ItemStack(Talismans.BRUSH.get()),new ItemStack(Talismans.PAPER.get()),new ItemStack(enhanced?Talismans.SPIRIT_CINNABAR.get():Talismans.CINNABAR.get()),new ItemStack(kind.catalyst())),kind.output(enhanced),Component.translatable("jei.xiuxian.talisman",kind.energy,kind.baseChance)));
         r.addRecipes(TALISMAN,talismans);
+        for(var kind:FormationKind.values())r.addIngredientInfo(new ItemStack(Formations.TOKENS.get(kind).get()),VanillaTypes.ITEM_STACK,Component.translatable("formation.xiuxian.jei."+kind.id));
     }
     static ItemStack water(){return PotionUtils.setPotion(new ItemStack(Items.POTION),Potions.WATER);}
     @Override public void registerRecipeCatalysts(IRecipeCatalystRegistration r){r.addRecipeCatalyst(new ItemStack(Xiuxian.FURNACE_ITEM.get()),BREW);r.addRecipeCatalyst(new ItemStack(Alchemy.FURNACE_ITEM.get()),PILL);r.addRecipeCatalyst(new ItemStack(ForgingContent.BASIC_FORGING_TABLE_ITEM.get()),FORGE);r.addRecipeCatalyst(new ItemStack(SpiritualFarming.KITCHEN_ITEM.get()),KITCHEN);r.addRecipeCatalyst(new ItemStack(Talismans.TABLE_ITEM.get()),TALISMAN);}

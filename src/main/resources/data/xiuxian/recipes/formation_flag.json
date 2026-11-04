@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PSP",
+    " S ",
+    "GT "
+  ],
+  "key": {
+    "P": {
+      "item": "xiuxian:blank_talisman_paper"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "G": {
+      "item": "xiuxian:spirit_gold_ingot"
+    },
+    "T": {
+      "item": "xiuxian:spirit_stone"
+    }
+  },
+  "result": {
+    "item": "xiuxian:formation_flag",
+    "count": 4
+  }
+}
