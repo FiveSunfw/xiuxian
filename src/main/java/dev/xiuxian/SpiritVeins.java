@@ -39,6 +39,20 @@ public final class SpiritVeins extends SavedData {
         }
         return result;
     }
+    BlockPos nearestLoadedCore(ServerLevel level, net.minecraft.world.phys.Vec3 origin, int radius) {
+        BlockPos best=null;double distance=radius*radius;
+        // Search index buckets using the requested detection radius, independent of aura settings.
+        int chunksRadius=(radius+15)/16;BlockPos at=BlockPos.containing(origin);
+        for(int x=(at.getX()>>4)-chunksRadius;x<=(at.getX()>>4)+chunksRadius;x++)
+            for(int z=(at.getZ()>>4)-chunksRadius;z<=(at.getZ()>>4)+chunksRadius;z++) {
+                var bucket=chunks.get(ChunkPos.asLong(x,z));if(bucket==null)continue;
+                for(Core core:bucket.values()) {
+                    if(!level.hasChunkAt(core.pos)||!level.getBlockState(core.pos).is(VeinBlocks.CORE.get()))continue;
+                    double d=core.pos.getCenter().distanceToSqr(origin);if(d<=distance){distance=d;best=core.pos;}
+                }
+            }
+        return best;
+    }
     double multiplier(Player player) {
         int extra = player.hasEffect(SpiritualFarming.STARLIGHT.get()) ? 8 : 0;
         return multiplierAt(player.getX(), player.getY(), player.getZ(), extra);

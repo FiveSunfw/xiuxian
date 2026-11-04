@@ -30,6 +30,7 @@ public class Xiuxian {
             ITEMS.getEntries().stream()
                 .sorted(java.util.Comparator.comparing(entry -> entry.getId().getPath()))
                 .forEach(entry -> output.accept(entry.get()));
+            for(var kind:TalismanKind.values())output.accept(kind.output(true));
         }).build());
     public static final Map<HerbKind, RegistryObject<Block>> HERBS = new EnumMap<>(HerbKind.class);
     public static final Map<HerbKind, RegistryObject<Item>> HERB_ITEMS = new EnumMap<>(HerbKind.class);
@@ -54,6 +55,7 @@ public class Xiuxian {
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
         ForgingContent.register();
         SpiritualFarming.register();
+        Talismans.register();
         CultivationResources.register(bus);
         BLOCKS.register(bus); ITEMS.register(bus); ENTITIES.register(bus); MENUS.register(bus);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Cultivation.CONFIG);

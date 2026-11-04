@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "xiuxian:block/talisman_table",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "xiuxian:block/talisman_table",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "xiuxian:block/talisman_table",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "xiuxian:block/talisman_table",
+      "y": 270
+    }
+  }
+}

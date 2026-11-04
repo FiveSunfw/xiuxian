@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "xiuxian:spirit_stone_dust"
+    }
+  ],
+  "result": {
+    "item": "xiuxian:blank_talisman_paper",
+    "count": 3
+  }
+}

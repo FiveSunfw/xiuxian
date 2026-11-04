@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " H ",
+    " C ",
+    "SB "
+  ],
+  "key": {
+    "H": {
+      "item": "xiuxian:wolf_brush_hair"
+    },
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "S": {
+      "item": "xiuxian:spirit_stone"
+    },
+    "B": {
+      "item": "minecraft:bamboo"
+    }
+  },
+  "result": {
+    "item": "xiuxian:wolf_hair_brush"
+  }
+}

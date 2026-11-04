@@ -22,6 +22,7 @@ public class BeastGameTests {
             var items=h.getLevel().getEntitiesOfClass(ItemEntity.class,beast.getBoundingBox().inflate(2));
             String guaranteed=switch(kind){case RABBIT->"spirit_horn";case WOLF->"wolf_pelt";case BOAR->"rockhide_plate";case VIPER->"viper_fang";case SPIDER->"frost_silk";case EAGLE->"wind_feather";case LIZARD->"thunder_scale";case KING->"king_tusk";case PYTHON->"beast_marrow";};
             h.assertTrue(items.stream().anyMatch(e->e.getItem().is(Beasts.material(guaranteed))),"Guaranteed species drop");
+            if(kind==BeastKind.WOLF){int hair=items.stream().filter(e->e.getItem().is(Beasts.material("wolf_brush_hair"))).mapToInt(e->e.getItem().getCount()).sum();h.assertTrue(hair>=1&&hair<=2,"Wolf brush hair drops 1-2");}
             if(kind==BeastKind.KING)h.assertTrue(items.stream().filter(e->e.getItem().is(Beasts.material("thick_rock_plate"))).mapToInt(e->e.getItem().getCount()).sum()==2,"King drops exactly two thick plates");
             if(kind==BeastKind.PYTHON)h.assertTrue(items.stream().filter(e->e.getItem().is(Beasts.material("jade_scale"))).mapToInt(e->e.getItem().getCount()).sum()>=2,"Python drops at least two scales");
             items.forEach(Entity::discard);beast.discard();

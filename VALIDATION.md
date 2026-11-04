@@ -256,3 +256,12 @@ JAR：build/releases/xiuxian-0.4.0.jar。SHA256：961C0B4E478C28B2D443EA58BD0548
 - `build.ps1 build --offline --console=plain --max-workers=1 --exclude-task downloadAssets --init-script .tools/test-runtime.init.gradle`：构建成功。503 个资源 JSON 解析成功，抽查 JAR 包含灵厨灶、植物、贴图、灵田配方和地下灵植生成资源。
 - 产物：`build/releases/xiuxian-0.5.0.jar`，SHA256 `225B2B3BB20B2E3FF8BF5F7779AF03997407D9F55F711F93EAB4C931E38F3FD5`。
 - 未进行用户客户端试玩、世界自然生成概率验证、所有灵食效果的逐项实机验证及双人独立服验收。
+
+
+## 2026-11-04：0.6.0 符箓与灵力消耗
+
+- Gradle `runGameTestServer --offline --console=plain --max-workers=1 --exclude-task downloadAssets --init-script .tools/test-runtime.init.gradle` 最终50项必需GameTest全部通过。开发中补测曾暴露假玩家受伤测试不适用，改用真实生物验证护盾；宠物判定改用主人UUID，最终复测通过。
+- 新增10项测试：制符拒绝与精确消耗；灵石供能/失败/符笔损坏/余量保存/菜单独立模式；九配方与两档品质；矿脉/方块实体/基岩保护；增益刷新与移除；投掷伤害/控制/雷电倍率；其他吸收来源与真实受击/保护事件；朱砂采矿工具/精准采集/工作台配方加载；投掷物寿命/宠物保护/落雷延迟无地面火；天眼定位/发光与成品共享冷却。原妖兽测试增加狼毫1～2掉落检查。
+- `build` 与 `reobfJar` 成功。JEI仍有既存getBackground弃用警告；没有新增依赖。535个JSON解析、模型纹理引用、符箓中英文键检查成功。已离线查看初版贴图合集，并抽查JAR类、模型、掉落/配方与世界生成资源。
+- 产物：`build/releases/xiuxian-0.6.0.jar`，SHA256：`6673997D658C386F1376636262F08E1958BE21B7B7CB5A29C0172542FBA40FA3`。
+- 开发测试运行于项目Forge 47.3.0基线；47.4.28客户端实际运行兼容性待用户验收。未启动/修改用户客户端，未验证用户世界实际生成密度或真实双人服。菜单、JEI、特效、跨步和实际多人操作仍需试玩；NBT读取验证不等同于完整进程重启验收。

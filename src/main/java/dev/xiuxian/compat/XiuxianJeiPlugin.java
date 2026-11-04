@@ -15,10 +15,11 @@ import net.minecraft.world.item.alchemy.*;
 import java.util.*;
 @JeiPlugin
 public class XiuxianJeiPlugin implements IModPlugin {
-    public record Entry(List<ItemStack> inputs,ItemStack output){}
-    static final RecipeType<Entry> BREW=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"herbal_brewing"),Entry.class), PILL=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"alchemy"),Entry.class), FORGE=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"forging"),Entry.class), KITCHEN=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"spirit_cooking"),Entry.class);
+    public record Entry(List<ItemStack> inputs,ItemStack output,Component detail){ public Entry(List<ItemStack> inputs,ItemStack output){this(inputs,output,Component.empty());} }
+    static final RecipeType<Entry> BREW=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"herbal_brewing"),Entry.class), PILL=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"alchemy"),Entry.class), FORGE=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"forging"),Entry.class), TALISMAN=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"talisman_drawing"),Entry.class), KITCHEN=new RecipeType<>(new ResourceLocation(Xiuxian.ID,"spirit_cooking"),Entry.class);
+    @Override public void registerItemSubtypes(ISubtypeRegistration r) { r.useNbtForSubtypes(Talismans.ITEMS.values().stream().map(v->v.get()).toArray(Item[]::new)); }
     @Override public ResourceLocation getPluginUid(){return new ResourceLocation(Xiuxian.ID,"jei");}
-    @Override public void registerCategories(IRecipeCategoryRegistration r){var gui=r.getJeiHelpers().getGuiHelper();r.addRecipeCategories(new Category(gui,BREW,Xiuxian.FURNACE_ITEM.get()),new Category(gui,PILL,Alchemy.FURNACE_ITEM.get()),new Category(gui,FORGE,ForgingContent.BASIC_FORGING_TABLE_ITEM.get()),new Category(gui,KITCHEN,SpiritualFarming.KITCHEN_ITEM.get()));}
+    @Override public void registerCategories(IRecipeCategoryRegistration r){var gui=r.getJeiHelpers().getGuiHelper();r.addRecipeCategories(new Category(gui,BREW,Xiuxian.FURNACE_ITEM.get()),new Category(gui,PILL,Alchemy.FURNACE_ITEM.get()),new Category(gui,FORGE,ForgingContent.BASIC_FORGING_TABLE_ITEM.get()),new Category(gui,KITCHEN,SpiritualFarming.KITCHEN_ITEM.get()),new Category(gui,TALISMAN,Talismans.TABLE_ITEM.get()));}
     @Override public void registerRecipes(IRecipeRegistration r){
         List<Entry> brews=new ArrayList<>();
         for(var kind:HerbKind.values())brews.add(new Entry(List.of(new ItemStack(Xiuxian.HERB_ITEMS.get(kind).get()),water()),new ItemStack(Xiuxian.ELIXIRS.get(kind).get())));
@@ -47,17 +48,23 @@ public class XiuxianJeiPlugin implements IModPlugin {
             meals.add(new Entry(ingredients,recipe.output()));
         }
         r.addRecipes(KITCHEN,meals);
+        List<Entry> talismans=new ArrayList<>();
+        for(var kind:TalismanKind.values())for(boolean enhanced:new boolean[]{false,true})
+            talismans.add(new Entry(List.of(new ItemStack(Talismans.BRUSH.get()),new ItemStack(Talismans.PAPER.get()),new ItemStack(enhanced?Talismans.SPIRIT_CINNABAR.get():Talismans.CINNABAR.get()),new ItemStack(kind.catalyst())),kind.output(enhanced),Component.translatable("jei.xiuxian.talisman",kind.energy,kind.baseChance)));
+        r.addRecipes(TALISMAN,talismans);
     }
     static ItemStack water(){return PotionUtils.setPotion(new ItemStack(Items.POTION),Potions.WATER);}
-    @Override public void registerRecipeCatalysts(IRecipeCatalystRegistration r){r.addRecipeCatalyst(new ItemStack(Xiuxian.FURNACE_ITEM.get()),BREW);r.addRecipeCatalyst(new ItemStack(Alchemy.FURNACE_ITEM.get()),PILL);r.addRecipeCatalyst(new ItemStack(ForgingContent.BASIC_FORGING_TABLE_ITEM.get()),FORGE);r.addRecipeCatalyst(new ItemStack(SpiritualFarming.KITCHEN_ITEM.get()),KITCHEN);}
+    @Override public void registerRecipeCatalysts(IRecipeCatalystRegistration r){r.addRecipeCatalyst(new ItemStack(Xiuxian.FURNACE_ITEM.get()),BREW);r.addRecipeCatalyst(new ItemStack(Alchemy.FURNACE_ITEM.get()),PILL);r.addRecipeCatalyst(new ItemStack(ForgingContent.BASIC_FORGING_TABLE_ITEM.get()),FORGE);r.addRecipeCatalyst(new ItemStack(SpiritualFarming.KITCHEN_ITEM.get()),KITCHEN);r.addRecipeCatalyst(new ItemStack(Talismans.TABLE_ITEM.get()),TALISMAN);}
     static class Category implements IRecipeCategory<Entry>{
         final RecipeType<Entry> type; final Item machine; final IDrawable bg,icon;
-        Category(IGuiHelper gui,RecipeType<Entry> type,Item machine){this.type=type;this.machine=machine;bg=gui.createBlankDrawable(170,65);icon=gui.createDrawableIngredient(VanillaTypes.ITEM_STACK,new ItemStack(machine));}
+        Category(IGuiHelper gui,RecipeType<Entry> type,Item machine){this.type=type;this.machine=machine;bg=gui.createBlankDrawable(170,type==TALISMAN?90:65);icon=gui.createDrawableIngredient(VanillaTypes.ITEM_STACK,new ItemStack(machine));}
         @Override public RecipeType<Entry> getRecipeType(){return type;}
         @Override public Component getTitle(){return machine.getDescription();}
         @Override public IDrawable getBackground(){return bg;}
         @Override public IDrawable getIcon(){return icon;}
         @Override public void setRecipe(IRecipeLayoutBuilder b,Entry e,IFocusGroup f){for(int i=0;i<e.inputs().size();i++)b.addSlot(RecipeIngredientRole.INPUT,4+i*25,12).addItemStack(e.inputs().get(i));b.addSlot(RecipeIngredientRole.OUTPUT,148,12).addItemStack(e.output());}
-        @Override public void draw(Entry e,mezz.jei.api.gui.ingredient.IRecipeSlotsView slots,net.minecraft.client.gui.GuiGraphics g,double x,double y){Component hint=type==PILL?Component.translatable("jei.xiuxian.alchemy"):type==FORGE?Component.translatable("jei.xiuxian.forging"):type==KITCHEN?Component.translatable("jei.xiuxian.kitchen"):Component.literal("→");g.drawString(net.minecraft.client.Minecraft.getInstance().font,hint,4,43,0xff604a35,false);}
+        @Override public void draw(Entry e,mezz.jei.api.gui.ingredient.IRecipeSlotsView slots,net.minecraft.client.gui.GuiGraphics g,double x,double y){Component hint=type==TALISMAN?e.detail():type==PILL?Component.translatable("jei.xiuxian.alchemy"):type==FORGE?Component.translatable("jei.xiuxian.forging"):type==KITCHEN?Component.translatable("jei.xiuxian.kitchen"):Component.literal("→");var font=net.minecraft.client.Minecraft.getInstance().font;
+            if(type==TALISMAN) { int lineY=36;for(var text:List.of(hint,Component.translatable("jei.xiuxian.talisman_formula")))for(var line:font.split(text,162)){g.drawString(font,line,4,lineY,0xff604a35,false);lineY+=10;} }
+            else g.drawString(font,hint,4,39,0xff604a35,false);}
     }
 }

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "xiuxian:cinnabar"
+    },
+    {
+      "item": "xiuxian:spirit_stone_dust"
+    }
+  ],
+  "result": {
+    "item": "xiuxian:spirit_cinnabar",
+    "count": 1
+  }
+}

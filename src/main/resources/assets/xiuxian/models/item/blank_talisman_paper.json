@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "xiuxian:item/blank_talisman_paper"
+  }
+}

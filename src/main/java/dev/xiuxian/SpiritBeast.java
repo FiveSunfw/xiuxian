@@ -124,7 +124,7 @@ public class SpiritBeast extends Monster {
         super.dropCustomDeathLoot(source,looting,recentlyHit);
         switch(kind){
             case RABBIT->{spawnAtLocation(Items.RABBIT);drop("spirit_horn",1);}
-            case WOLF->{drop("wolf_pelt",1);chance("azure_fang",.5f);}
+            case WOLF->{drop("wolf_pelt",1);drop("wolf_brush_hair",1+random.nextInt(2));chance("azure_fang",.5f);}
             case BOAR->{spawnAtLocation(new net.minecraft.world.item.ItemStack(Items.PORKCHOP,1+random.nextInt(2)));drop("rockhide_plate",1);chance("curved_tusk",.35f);}
             case VIPER->{drop("viper_fang",1);chance("venom_sac",.4f);}
             case SPIDER->{drop("frost_silk",1+random.nextInt(2));chance("frost_gland",.35f);}

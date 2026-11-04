@@ -20,7 +20,7 @@ public final class Beasts {
             var type=ENTITIES.register(kind.id,()->EntityType.Builder.<SpiritBeast>of((t,l)->new SpiritBeast(t,l,kind),MobCategory.MONSTER).sized(kind.width,kind.height).clientTrackingRange(8).build("xiuxian:"+kind.id));TYPES.put(kind,type);
             EGGS.put(kind,Xiuxian.ITEMS.register(kind.id+"_spawn_egg",()->new net.minecraftforge.common.ForgeSpawnEggItem(type,kind.color,0xc8dba2,new Item.Properties())));
         }
-        for(String id:List.of("spirit_horn","wolf_pelt","azure_fang","rockhide_plate","curved_tusk","viper_fang","venom_sac","frost_silk","frost_gland","wind_feather","eagle_talon","thunder_scale","charged_spine","thick_rock_plate","king_tusk","jade_scale","python_sinew","beast_marrow"))MATERIALS.put(id,Xiuxian.ITEMS.register(id,()->new Item(new Item.Properties())));
+        for(String id:List.of("spirit_horn","wolf_pelt","wolf_brush_hair","azure_fang","rockhide_plate","curved_tusk","viper_fang","venom_sac","frost_silk","frost_gland","wind_feather","eagle_talon","thunder_scale","charged_spine","thick_rock_plate","king_tusk","jade_scale","python_sinew","beast_marrow"))MATERIALS.put(id,Xiuxian.ITEMS.register(id,()->new Item(new Item.Properties())));
     }
     public static Item material(String id){return MATERIALS.get(id).get();}
     public static void register(net.minecraftforge.eventbus.api.IEventBus bus){ENTITIES.register(bus);bus.addListener(Beasts::attributes);bus.addListener(Beasts::placements);}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "PSP",
+    " C "
+  ],
+  "key": {
+    "W": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "P": {
+      "item": "xiuxian:blank_talisman_paper"
+    },
+    "S": {
+      "item": "xiuxian:spirit_stone"
+    },
+    "C": {
+      "item": "minecraft:crafting_table"
+    }
+  },
+  "result": {
+    "item": "xiuxian:talisman_table"
+  }
+}
